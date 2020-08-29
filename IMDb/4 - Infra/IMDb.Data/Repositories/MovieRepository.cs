@@ -43,6 +43,19 @@ namespace IMDb.Data.Repositories
             Update<RatingOfMovie>(ratingOfMovie);
         }
 
+        public IEnumerable<Movie> GetMovies(Expression<Func<Movie, bool>> predicate)
+        {
+            IQueryable<Movie> query;
+
+            query = _context.Set<Movie>()
+                            .Include(x => x.CastOfMovies)
+                                .ThenInclude(x => x.Cast)
+                            .Include(x => x.RatingOfMovies)
+                            .AsNoTracking();
+
+            return query.Where(predicate).ToList();
+        }
+
         public IEnumerable<RatingOfMovie> GetRatingOfMoviesByFilters(Expression<Func<RatingOfMovie, bool>> predicate,
            params Expression<Func<RatingOfMovie, object>>[] include)
         {

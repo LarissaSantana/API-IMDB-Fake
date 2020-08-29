@@ -8,7 +8,8 @@ namespace IMDb.Domain.Repositories
 {
     public interface IMovieRepository : IRepository<Movie>
     {
-        Movie GetMovieById(Guid id);        
+        Movie GetMovieById(Guid id);
+        IEnumerable<Movie> GetMovies(Expression<Func<Movie, bool>> predicate);
 
         //Cast
         public void AddCast(Cast cast);

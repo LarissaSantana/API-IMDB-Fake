@@ -40,7 +40,7 @@ namespace IMDb.Data.Core
         {
             return _context.Set<TEntity>()
               .AsNoTracking()
-              .AsEnumerable();
+              .ToList();
         }
 
         public IEnumerable<TEntity> GetByFilters(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] include)
@@ -63,7 +63,10 @@ namespace IMDb.Data.Core
                 }
             }
 
-            return query.Where(predicate).AsEnumerable();
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            return query.ToList();
         }
 
         public TEntity GetById(Guid id)
