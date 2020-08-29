@@ -24,7 +24,8 @@ namespace IMDb.Domain.Entities
 
         public override bool IsValid()
         {
-            throw new NotImplementedException();
+            ValidationResult = Validate(this);
+            return ValidationResult.IsValid;
         }
     }
 }
