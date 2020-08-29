@@ -8,6 +8,8 @@ namespace IMDb.Domain.Entities
         public string Name { get; private set; }
         public bool Status { get; private set; }
         public string Password { get; private set; }
+        public Guid RoleId { get; private set; }
+        public virtual Role Role { get; private set; }
 
         protected User() { }
 
