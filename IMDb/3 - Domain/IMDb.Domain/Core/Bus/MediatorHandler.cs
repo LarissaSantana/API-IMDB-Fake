@@ -17,5 +17,10 @@ namespace IMDb.Domain.Core.Bus
         {
             return _mediator.Send(command);
         }
+
+        public Task RaiseEvent<T>(T @event) where T : Event
+        {
+            return _mediator.Publish(@event);
+        }
     }
 }

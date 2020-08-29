@@ -3,6 +3,7 @@ using IMDb.Domain.Core.Data;
 using IMDb.Domain.Core.Messages;
 using IMDb.Domain.Core.Notifications;
 using IMDb.Domain.Entities;
+using IMDb.Domain.Events;
 using IMDb.Domain.Repositories;
 using MediatR;
 using System;
@@ -72,6 +73,8 @@ namespace IMDb.Domain.Commands
             var ratingOfMovieRepo = _movieRepository.GetRatingOfMoviesByFilters(mr =>
                     mr.UserId == message.UserId && mr.MovieId == mr.MovieId).FirstOrDefault();
 
+            RatingOfMovieAddedEvent ratingOfMovieAddedEvent = null;
+
             if (ratingOfMovieRepo == null)
             {
                 var ratingOfMovie = RatingOfMovie.RatingOfMovieFactory
@@ -84,7 +87,7 @@ namespace IMDb.Domain.Commands
                 }
 
                 _movieRepository.AddRatingOfMovie(ratingOfMovie);
-                //TODO: Adicionar evento para calcular média
+                ratingOfMovieAddedEvent = new RatingOfMovieAddedEvent(ratingOfMovie.Id, ratingOfMovie.Rate, ratingOfMovie.MovieId);
             }
             else
             {
@@ -98,10 +101,16 @@ namespace IMDb.Domain.Commands
                 }
 
                 _movieRepository.UpdateRatingOfMovie(ratingOfMovie);
-                //TODO: Adicionar evento para calcular média
+                ratingOfMovieAddedEvent = new RatingOfMovieAddedEvent(ratingOfMovie.Id, ratingOfMovie.Rate, ratingOfMovie.MovieId);
             }
 
-            if (Commit()) return await Task.FromResult(true);
+            if (Commit())
+            {
+                if (ratingOfMovieAddedEvent != null)
+                    await _bus.RaiseEvent(ratingOfMovieAddedEvent);
+
+                return await Task.FromResult(true);
+            }
 
             return false;
         }

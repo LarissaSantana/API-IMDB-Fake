@@ -27,6 +27,7 @@ namespace IMDb.API
 
             services.AddScoped<IRequestHandler<AddMovieCommand, bool>, MovieCommandHandler>();
             services.AddScoped<IRequestHandler<AddRatingOfMovieCommand, bool>, MovieCommandHandler>();
+            services.AddScoped<IRequestHandler<AddMeanCommand, bool>, MovieCommandHandler>();
         }
     }
 }
