@@ -1,4 +1,5 @@
-﻿using IMDb.Domain.DomainObjects;
+﻿using FluentValidation;
+using IMDb.Domain.DomainObjects;
 using System;
 
 namespace IMDb.Domain.Entities
@@ -22,8 +23,33 @@ namespace IMDb.Domain.Entities
 
         public override bool IsValid()
         {
+            //TODO: TRADUZIR
+            RuleFor(movieRating => movieRating.Rate)
+                .InclusiveBetween(0, 4)
+                .WithMessage("o campo \"Rate\" deve estar entre 0 e 4!");
+
             ValidationResult = Validate(this);
             return ValidationResult.IsValid;
+        }
+
+        public void UpdateRate(int rate)
+        {
+            Rate = rate;
+        }
+
+        public static class RatingOfMovieFactory
+        {
+            public static RatingOfMovie Create(int rate, Guid movieId, Guid userId)
+            {
+                var ratingOfMovie = new RatingOfMovie
+                {
+                    Id = Guid.NewGuid(),
+                    Rate = rate,
+                    MovieId = movieId,
+                    UserId = userId
+                };
+                return ratingOfMovie;
+            }
         }
     }
 }
