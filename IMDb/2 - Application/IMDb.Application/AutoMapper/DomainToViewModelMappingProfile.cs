@@ -1,41 +1,14 @@
 ﻿using AutoMapper;
 using IMDb.Application.ViewModels.Return;
+using IMDb.Domain.Core.Pagination;
 using IMDb.Domain.Entities;
 
 namespace IMDb.Application.AutoMapper
 {
     public class DomainToViewModelMappingProfile : Profile
     {
-        //Func<Movie, MovieViewModel> MovieViewModelLambda = m =>
-        //{
-        //    var castOfMovieList = new List<CastOfMovieViewModel>();
-        //    if (m.CastOfMovies != null)
-        //    {
-        //        foreach (var castOfMovie in m.CastOfMovies)
-        //        {
-        //            castOfMovieList.Add(new CastOfMovieViewModel
-        //            {
-        //                CastOfMovieId = castOfMovie.Id,
-        //                Name = castOfMovie.Cast.Name,
-        //                CastType = castOfMovie.Cast.CastType
-        //            });
-        //        }
-        //    }
-
-        //    return new MovieViewModel
-        //    {
-        //        Id = m.Id,
-        //        Title = m.Title,
-        //        Genre = m.Genre,
-        //        Mean = m.Mean,
-        //        CastOfMovieList = castOfMovieList
-        //    };
-        //};
-
         public DomainToViewModelMappingProfile()
         {
-            //CreateMap<Movie, MovieViewModel>()
-            //    .ConstructUsing(m => MovieViewModelLambda(m));
 
             CreateMap<Movie, MovieViewModel>()
                 .ForMember(dest => dest.CastOfMovie, opt => opt.MapFrom(src => src.CastOfMovies));
@@ -51,6 +24,9 @@ namespace IMDb.Application.AutoMapper
             CreateMap<Movie, MovieWithRatingViewModel>()
                 .ForMember(dest => dest.CastOfMovie, opt => opt.MapFrom(src => src.CastOfMovies))
                 .ForMember(dest => dest.NumberOfVotes, opt => opt.MapFrom(src => src.RatingOfMovies.Count));
+
+            CreateMap<Pagination<Movie>, Pagination<MovieWithRatingViewModel>>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
         }
     }
 }

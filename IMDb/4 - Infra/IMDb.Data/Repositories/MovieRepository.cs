@@ -1,5 +1,6 @@
 ﻿using IMDb.Data.Context;
 using IMDb.Data.Core;
+using IMDb.Domain.Core.Pagination;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,35 @@ namespace IMDb.Data.Repositories
         public void UpdateRatingOfMovie(RatingOfMovie ratingOfMovie)
         {
             Update<RatingOfMovie>(ratingOfMovie);
+        }
+
+        public Pagination<Movie> GetMoviesWithPagination(
+            Expression<Func<Movie, bool>> predicate,
+            int pageNumber,
+            int pageSize)
+        {
+
+            IQueryable<Movie> query;
+
+            query = _context.Set<Movie>()
+                            .Include(x => x.CastOfMovies)
+                                .ThenInclude(x => x.Cast)
+                            .Include(x => x.RatingOfMovies)
+                            .OrderByDescending(x => x.RatingOfMovies.Count())
+                                .ThenBy(x => x.Title)
+                            .AsNoTracking();
+
+            var skipNumber = (pageNumber - 1) * pageSize;
+            var totalItemCount = query.Where(predicate).Count();
+            var movies = query.Where(predicate).Skip(skipNumber).Take(pageSize).ToList();
+
+            return new Pagination<Movie>
+                 (
+                     items: movies,
+                     totalItemCount: totalItemCount,
+                     pageSize: pageSize,
+                     currentPage: pageNumber
+                 );
         }
 
         public IEnumerable<Movie> GetMovies(Expression<Func<Movie, bool>> predicate)

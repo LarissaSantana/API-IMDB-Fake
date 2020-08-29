@@ -56,9 +56,9 @@ namespace IMDb.API.Controllers
 
         [HttpGet]
         [Route("moviesByFilters")]
-        public IActionResult GetMovieByFilters([FromBody] MovieFilterViewModel viewModel)
+        public IActionResult GetMovieByFilters([FromBody] MovieFilterViewModel viewModel, int pageNumber = 1, int pageSize = 10)
         {
-            var movies = _movieAppService.GetMovies(viewModel);
+            var movies = _movieAppService.GetMoviesWithPagination(viewModel, pageNumber, pageSize);
 
             return GetResponse(movies);
         }

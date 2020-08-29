@@ -1,4 +1,5 @@
 ﻿using IMDb.Domain.Core.Data;
+using IMDb.Domain.Core.Pagination;
 using IMDb.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace IMDb.Domain.Repositories
     {
         Movie GetMovieById(Guid id);
         IEnumerable<Movie> GetMovies(Expression<Func<Movie, bool>> predicate);
+        Pagination<Movie> GetMoviesWithPagination(Expression<Func<Movie, bool>> predicate, int pageNumber, int pageSize);
 
         //Cast
         public void AddCast(Cast cast);
