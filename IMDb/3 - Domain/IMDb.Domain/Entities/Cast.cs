@@ -1,6 +1,7 @@
 ﻿using IMDb.Domain.DomainObjects;
 using IMDb.Domain.Enums;
 using System;
+using System.Collections.Generic;
 
 namespace IMDb.Domain.Entities
 {
@@ -8,8 +9,12 @@ namespace IMDb.Domain.Entities
     {
         public string Name { get; private set; }
         public CastType CastType { get; private set; }
+        public virtual ICollection<CastOfMovie> CastOfMovies { get; private set; }
 
-        protected Cast() { }
+        protected Cast()
+        {
+            CastOfMovies = new List<CastOfMovie>();
+        }
 
         public Cast(Guid id, string name)
         {
