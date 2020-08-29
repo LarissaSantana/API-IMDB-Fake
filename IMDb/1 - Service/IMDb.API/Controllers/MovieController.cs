@@ -1,5 +1,6 @@
 ﻿using IMDb.Application.Services;
 using IMDb.Application.ViewModels.Add;
+using IMDb.Domain.Core.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,13 @@ namespace IMDb.API.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieAppService _movieAppService;
+        private readonly IDomainNotificationHandler<DomainNotification> _notifications;
 
-        public MovieController(IMovieAppService movieAppService)
+        public MovieController(IMovieAppService movieAppService,
+            IDomainNotificationHandler<DomainNotification> notifications)
         {
             _movieAppService = movieAppService;
+            _notifications = notifications;
         }
 
         [HttpPost]
@@ -26,7 +30,7 @@ namespace IMDb.API.Controllers
                 return BadRequest(errors);
 
             _movieAppService.AddMovie(viewModel);
-            return Ok();
+            return GetResponse();
         }
 
         [HttpPost]
@@ -38,7 +42,7 @@ namespace IMDb.API.Controllers
                 return BadRequest(errors);
 
             _movieAppService.AddRatingOfMovie(viewModel);
-            return Ok();
+            return GetResponse();
         }
 
         [HttpGet]
@@ -46,9 +50,10 @@ namespace IMDb.API.Controllers
         public IActionResult GetMovieById(Guid id)
         {
             var movie = _movieAppService.GetMovieById(id);
-            return Ok(movie);
+            return GetResponse(movie);
         }
 
+        //TODO: criar uma classe base
         private List<string> GetErrorListFromModelState()
         {
             var errors = new List<string>();
@@ -58,6 +63,23 @@ namespace IMDb.API.Controllers
                 errors.Add(errorMsg);
             }
             return errors;
+        }
+
+        private IActionResult GetResponse()
+        {
+            return GetResponse(null);
+        }
+
+        private IActionResult GetResponse(object result)
+        {
+            if (_notifications.HasNotifications())
+            {
+                return BadRequest(_notifications.GetNotifications().Select(n => n.Value));
+            }
+
+            if (result == null) return Ok();
+
+            return Ok(result);
         }
     }
 }
