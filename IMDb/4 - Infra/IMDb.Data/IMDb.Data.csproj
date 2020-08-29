@@ -21,8 +21,4 @@
     <ProjectReference Include="..\..\3 - Domain\IMDb.Domain\IMDb.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

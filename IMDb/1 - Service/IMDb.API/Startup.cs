@@ -23,6 +23,7 @@ namespace IMDb.API
                 opt.UseSqlServer(Configuration.GetConnectionString("IMDbConnection")));
 
             services.AddControllers();
+            services.RegisterServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
