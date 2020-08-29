@@ -14,13 +14,11 @@ namespace IMDb.Domain.Commands
         IRequestHandler<AddMovieCommand, bool>
     {
         private readonly IMovieRepository _movieRepository;
-        private readonly IMediatorHandler _bus;
 
         public MovieCommandHandler(IMovieRepository movieRepository, IUnitOfWork uow, IMediatorHandler bus)
             : base(bus, uow)
         {
             _movieRepository = movieRepository;
-            _bus = bus;
         }
 
         public async Task<bool> Handle(AddMovieCommand message, CancellationToken cancellationToken)
