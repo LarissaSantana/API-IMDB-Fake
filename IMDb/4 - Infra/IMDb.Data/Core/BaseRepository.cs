@@ -48,7 +48,7 @@ namespace IMDb.Data.Core
             return GetByFilters<TEntity>(predicate, include);
         }
 
-        protected IEnumerable<T> GetByFilters<T>(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] include) where T : BaseEntity<T>
+        public IEnumerable<T> GetByFilters<T>(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] include) where T : BaseEntity<T>
         {
             if (predicate == null) return null;
 
@@ -75,6 +75,12 @@ namespace IMDb.Data.Core
         {
             _context.Update(entity);
         }
+
+        protected void Update<T>(T entity) where T : BaseEntity<T>
+        {
+            _context.Update(entity);
+        }
+
         public void Dispose()
         {
             _context?.Dispose();

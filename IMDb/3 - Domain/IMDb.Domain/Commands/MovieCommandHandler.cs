@@ -6,6 +6,7 @@ using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using MediatR;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -62,5 +63,44 @@ namespace IMDb.Domain.Commands
 
         //    return await Task.FromResult(_uow.Commit());
         //}
+
+        public async Task<bool> Handle(AddRatingOfMovieCommand message, CancellationToken cancellationToken)
+        {
+            var ratingOfMovieRepo = _movieRepository.GetRatingOfMoviesByFilters(mr =>
+                    mr.UserId == message.UserId && mr.MovieId == mr.MovieId).FirstOrDefault();
+
+            if (ratingOfMovieRepo == null)
+            {
+                var ratingOfMovie = RatingOfMovie.RatingOfMovieFactory
+                    .Create(message.Rate, message.MovieId, message.UserId);
+
+                if (!ratingOfMovie.IsValid())
+                {
+                    NotifyValidationErrors(ratingOfMovie.ValidationResult);
+                    return false;
+                }
+
+                _movieRepository.AddRatingOfMovie(ratingOfMovie);
+                //TODO: Adicionar evento para calcular média
+            }
+            else
+            {
+                var ratingOfMovie = ratingOfMovieRepo;
+                ratingOfMovie.UpdateRate(message.Rate);
+
+                if (!ratingOfMovie.IsValid())
+                {
+                    NotifyValidationErrors(ratingOfMovie.ValidationResult);
+                    return false;
+                }
+
+                _movieRepository.UpdateRatingOfMovie(ratingOfMovie);
+                //TODO: Adicionar evento para calcular média
+            }
+
+            if (Commit()) return await Task.FromResult(true);
+
+            return false;
+        }
     }
 }

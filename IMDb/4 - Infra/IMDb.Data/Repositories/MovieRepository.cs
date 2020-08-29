@@ -2,6 +2,9 @@
 using IMDb.Data.Core;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace IMDb.Data.Repositories
 {
@@ -17,6 +20,22 @@ namespace IMDb.Data.Repositories
         public void AddCast(Cast cast)
         {
             Add<Cast>(cast);
+        }
+
+        public void AddRatingOfMovie(RatingOfMovie ratingOfMovie)
+        {
+            Add<RatingOfMovie>(ratingOfMovie);
+        }
+
+        public void UpdateRatingOfMovie(RatingOfMovie ratingOfMovie)
+        {
+            Update<RatingOfMovie>(ratingOfMovie);
+        }
+
+        public IEnumerable<RatingOfMovie> GetRatingOfMoviesByFilters(Expression<Func<RatingOfMovie, bool>> predicate,
+           params Expression<Func<RatingOfMovie, object>>[] include)
+        {
+            return GetByFilters<RatingOfMovie>(predicate, include);
         }
     }
 }
