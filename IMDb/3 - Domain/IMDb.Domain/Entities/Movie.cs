@@ -49,6 +49,11 @@ namespace IMDb.Domain.Entities
             castOfMovie.ToList().ForEach(c => CastOfMovies.Add(c));
         }
 
+        public void AddMean(float mean)
+        {
+            Mean = mean;
+        }
+
         public static class MovieFactory
         {
             public static Movie Create(Genre genre, string title)

@@ -5,6 +5,7 @@ using IMDb.Domain.Core.Notifications;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -14,7 +15,8 @@ namespace IMDb.Domain.Commands
 {
     public class MovieCommandHandler : CommandHandler,
         IRequestHandler<AddMovieCommand, bool>,
-        IRequestHandler<AddRatingOfMovieCommand, bool>
+        IRequestHandler<AddRatingOfMovieCommand, bool>,
+        IRequestHandler<AddMeanCommand, bool>
     {
         private readonly IMovieRepository _movieRepository;
 
@@ -98,6 +100,26 @@ namespace IMDb.Domain.Commands
                 _movieRepository.UpdateRatingOfMovie(ratingOfMovie);
                 //TODO: Adicionar evento para calcular média
             }
+
+            if (Commit()) return await Task.FromResult(true);
+
+            return false;
+        }
+
+        public async Task<bool> Handle(AddMeanCommand message, CancellationToken cancellationToken)
+        {
+            var ratingOfMovie = _movieRepository.GetRatingOfMoviesByFilters(m => m.MovieId == message.MovieId,
+                include => include.Movie).ToList();
+
+            if (!ratingOfMovie.Any()) return false;
+
+            var mean = ratingOfMovie.Select(x => x.Rate).Average();
+            var movie = ratingOfMovie.Select(x => x.Movie).FirstOrDefault();
+
+            if (movie == null) return false;
+            movie.AddMean((float)mean);
+
+            _movieRepository.Update(movie);
 
             if (Commit()) return await Task.FromResult(true);
 

@@ -29,6 +29,7 @@ namespace IMDb.Application.Services
 
         public void AddRatingOfMovie(AddRatingOfMovieViewModel viewModel)
         {
+            //TODO: inserir por usuário logado
             var map = _mapper.Map<AddRatingOfMovieCommand>(viewModel);
             _bus.SendCommand(map);
         }
