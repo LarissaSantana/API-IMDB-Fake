@@ -13,5 +13,10 @@ namespace IMDb.Data.Repositories
         {
             _context = context;
         }
+
+        public void AddCast(Cast cast)
+        {
+            Add<Cast>(cast);
+        }
     }
 }
