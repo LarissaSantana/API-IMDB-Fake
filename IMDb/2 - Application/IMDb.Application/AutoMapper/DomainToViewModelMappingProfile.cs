@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using IMDb.Application.ViewModels.Return;
 using IMDb.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 
 namespace IMDb.Application.AutoMapper
 {
@@ -51,8 +48,9 @@ namespace IMDb.Application.AutoMapper
             CreateMap<CastOfMovie, CastOfMovieViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
-            //CreateMap<Movie, MovieWithRatingViewModel>()
-            //    .ConstructUsing(m => MovieWithRatingViewModelLambda(m));
+            CreateMap<Movie, MovieWithRatingViewModel>()
+                .ForMember(dest => dest.CastOfMovie, opt => opt.MapFrom(src => src.CastOfMovies))
+                .ForMember(dest => dest.NumberOfVotes, opt => opt.MapFrom(src => src.RatingOfMovies.Count));
         }
     }
 }

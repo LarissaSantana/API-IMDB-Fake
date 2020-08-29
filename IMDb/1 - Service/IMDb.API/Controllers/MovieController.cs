@@ -1,5 +1,6 @@
 ﻿using IMDb.Application.Services;
 using IMDb.Application.ViewModels.Add;
+using IMDb.Application.ViewModels.Filters;
 using IMDb.Domain.Core.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -51,6 +52,15 @@ namespace IMDb.API.Controllers
         {
             var movie = _movieAppService.GetMovieById(id);
             return GetResponse(movie);
+        }
+
+        [HttpGet]
+        [Route("moviesByFilters")]
+        public IActionResult GetMovieByFilters([FromBody] MovieFilterViewModel viewModel)
+        {
+            var movies = _movieAppService.GetMovies(viewModel);
+
+            return GetResponse(movies);
         }
 
         //TODO: criar uma classe base
