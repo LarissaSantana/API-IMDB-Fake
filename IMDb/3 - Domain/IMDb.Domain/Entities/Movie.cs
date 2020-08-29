@@ -11,12 +11,12 @@ namespace IMDb.Domain.Entities
         public Genre Genre { get; private set; }
         public float? Mean { get; private set; }
         public virtual ICollection<CastOfMovie> CastOfMovies { get; private set; }
-        public virtual ICollection<RatingOfMovie> MovieRatings { get; private set; }
+        public virtual ICollection<RatingOfMovie> RatingOfMovies { get; private set; }
 
         protected Movie()
         {
             CastOfMovies = new List<CastOfMovie>();
-            MovieRatings = new List<RatingOfMovie>();
+            RatingOfMovies = new List<RatingOfMovie>();
         }
 
         public Movie(Guid id, string title, Genre genre)

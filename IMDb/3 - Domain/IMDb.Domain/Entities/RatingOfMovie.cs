@@ -10,7 +10,8 @@ namespace IMDb.Domain.Entities
         public virtual User User { get; private set; }
         public Guid MovieId { get; private set; }
         public virtual Movie Movie { get; private set; }
-        public RatingOfMovie() { }
+
+        protected RatingOfMovie() { }
 
         public RatingOfMovie(Guid id, Guid userId, Guid movieId)
         {
