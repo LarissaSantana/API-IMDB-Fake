@@ -1,6 +1,7 @@
 ﻿using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Core.Data;
 using IMDb.Domain.Core.Messages;
+using IMDb.Domain.Core.Notifications;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using MediatR;
@@ -15,15 +16,15 @@ namespace IMDb.Domain.Commands
     {
         private readonly IMovieRepository _movieRepository;
 
-        public MovieCommandHandler(IMovieRepository movieRepository, IUnitOfWork uow, IMediatorHandler bus)
-            : base(bus, uow)
+        public MovieCommandHandler(IMovieRepository movieRepository, IUnitOfWork uow, IMediatorHandler bus,
+            IDomainNotificationHandler<DomainNotification> notifications)
+            : base(bus, uow, notifications)
         {
             _movieRepository = movieRepository;
         }
 
         public async Task<bool> Handle(AddMovieCommand message, CancellationToken cancellationToken)
         {
-            //cast        
             var movie = Movie.MovieFactory.Create(message.Genre, message.Title);
             var castOfMovieList = new List<CastOfMovie>();
 
@@ -31,30 +32,23 @@ namespace IMDb.Domain.Commands
             {
                 var castModel = Cast.CastFactory.Create(cast.Name, cast.CastType);
                 if (!castModel.IsValid())
-                {
-                    //TODO: notificar erro da validação da entidade
-                }
+                    NotifyValidationErrors(castModel.ValidationResult);
 
                 var castOfMovieModel = CastOfMovie.CastOfMovieFactory.Create(movie.Id, castModel.Id);
                 castOfMovieModel.AddCast(castModel);
                 if (!castOfMovieModel.IsValid())
-                {
-                    //TODO: notificar erro da validação da entidade
-                }
+                    NotifyValidationErrors(castOfMovieModel.ValidationResult);
 
                 castOfMovieList.Add(castOfMovieModel);
             }
 
             movie.AddCastOfMovie(castOfMovieList);
             if (!movie.IsValid())
-            {
-                //TODO: notificar erro da validação da entidade
-            }
+                NotifyValidationErrors(movie.ValidationResult);
 
             _movieRepository.Add(movie);
 
-            //TODO: implementar o Commit() no CommandHandler
-            if (_uow.Commit()) return await Task.FromResult(true);
+            if (Commit()) return await Task.FromResult(true);
 
             return false;
         }
