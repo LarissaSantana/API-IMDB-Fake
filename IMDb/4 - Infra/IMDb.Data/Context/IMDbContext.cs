@@ -1,4 +1,5 @@
-﻿using IMDb.Domain.Entities;
+﻿using IMDb.Data.Mappings;
+using IMDb.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace IMDb.Data.Context
@@ -16,7 +17,15 @@ namespace IMDb.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new UserMapping());
+            modelBuilder.ApplyConfiguration(new RoleMapping());
 
+            modelBuilder.ApplyConfiguration(new MovieMapping());
+            modelBuilder.ApplyConfiguration(new RatingOfMovieMapping());
+            modelBuilder.ApplyConfiguration(new CastMapping());
+            modelBuilder.ApplyConfiguration(new CastOfMovieMapping());
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
