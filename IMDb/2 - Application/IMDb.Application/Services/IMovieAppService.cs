@@ -5,5 +5,6 @@ namespace IMDb.Application.Services
     public interface IMovieAppService
     {
         void AddMovie(AddMovieViewModel viewModel);
+        void AddRatingOfMovie(AddRatingOfMovieViewModel viewModel);
     }
 }

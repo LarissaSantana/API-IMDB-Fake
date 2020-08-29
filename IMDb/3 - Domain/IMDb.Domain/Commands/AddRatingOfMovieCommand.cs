@@ -1,8 +1,9 @@
-﻿using System;
+﻿using IMDb.Domain.Core.Messages;
+using System;
 
 namespace IMDb.Domain.Commands
 {
-    public class AddRatingOfMovieCommand
+    public class AddRatingOfMovieCommand : Command
     {
         public int Rate { get; private set; }
         public Guid MovieId { get; private set; }

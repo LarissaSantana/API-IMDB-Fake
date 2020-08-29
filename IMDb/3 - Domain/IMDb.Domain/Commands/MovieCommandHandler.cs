@@ -13,7 +13,8 @@ using System.Threading.Tasks;
 namespace IMDb.Domain.Commands
 {
     public class MovieCommandHandler : CommandHandler,
-        IRequestHandler<AddMovieCommand, bool>
+        IRequestHandler<AddMovieCommand, bool>,
+        IRequestHandler<AddRatingOfMovieCommand, bool>
     {
         private readonly IMovieRepository _movieRepository;
 

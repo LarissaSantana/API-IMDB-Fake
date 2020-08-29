@@ -24,5 +24,11 @@ namespace IMDb.Application.Services
             var map = _mapper.Map<AddMovieCommand>(viewModel);
             _bus.SendCommand(map);
         }
+
+        public void AddRatingOfMovie(AddRatingOfMovieViewModel viewModel)
+        {
+            var map = _mapper.Map<AddRatingOfMovieCommand>(viewModel);
+            _bus.SendCommand(map);
+        }
     }
 }

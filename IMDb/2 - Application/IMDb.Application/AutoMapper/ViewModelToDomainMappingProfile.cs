@@ -29,6 +29,9 @@ namespace IMDb.Application.AutoMapper
 
             CreateMap<AddMovieViewModel, AddMovieCommand>()
                 .ConstructUsing(m => lambda(m));
+
+            CreateMap<AddRatingOfMovieViewModel, AddRatingOfMovieCommand>()
+                .ConstructUsing(m => new AddRatingOfMovieCommand(m.Rate, m.MovieId, m.UserId));
         }
     }
 }
