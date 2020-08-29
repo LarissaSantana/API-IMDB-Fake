@@ -11,6 +11,8 @@ namespace IMDb.API
         public static void RegisterServices(this IServiceCollection services)
         {
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
         }
