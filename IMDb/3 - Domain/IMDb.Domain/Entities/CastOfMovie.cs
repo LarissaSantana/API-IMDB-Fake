@@ -24,5 +24,26 @@ namespace IMDb.Domain.Entities
             ValidationResult = Validate(this);
             return ValidationResult.IsValid;
         }
+
+        public void AddCast(Cast cast)
+        {
+            CastId = cast.Id;
+            Cast = cast;
+        }
+
+        public static class CastOfMovieFactory
+        {
+            public static CastOfMovie Create(Guid movieId, Guid castId)
+            {
+                var castOfMovie = new CastOfMovie
+                    (
+                        id: Guid.NewGuid(),
+                        movieId: movieId,
+                        castId: castId
+                    );
+
+                return castOfMovie;
+            }
+        }
     }
 }

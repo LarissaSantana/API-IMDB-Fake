@@ -1,7 +1,9 @@
-﻿using IMDb.Domain.DomainObjects;
+﻿using FluentValidation;
+using IMDb.Domain.DomainObjects;
 using IMDb.Domain.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IMDb.Domain.Entities
 {
@@ -28,8 +30,38 @@ namespace IMDb.Domain.Entities
 
         public override bool IsValid()
         {
+            //TODO: traduzir mensagem!
+            RuleFor(movie => movie.CastOfMovies)
+                .Must(castOfMovies => castOfMovies.Any(x => x.Cast.CastType == CastType.Director) &&
+                                      castOfMovies.Where(x => x.Cast.CastType == CastType.Director).Count() == 1)
+                .WithMessage("O Filme deve ter um Diretor!");
+
+            RuleFor(movie => movie.CastOfMovies)
+                .Must(castOfMovies => castOfMovies.Any(x => x.Cast.CastType == CastType.Actor))
+                .WithMessage("O Filme deve ter pelo menos um Ator!");
+
             ValidationResult = Validate(this);
             return ValidationResult.IsValid;
+        }
+
+        public void AddCastOfMovie(ICollection<CastOfMovie> castOfMovie)
+        {
+            castOfMovie.ToList().ForEach(c => CastOfMovies.Add(c));
+        }
+
+        public static class MovieFactory
+        {
+            public static Movie Create(Genre genre, string title)
+            {
+                var movie = new Movie
+                {
+                    Id = Guid.NewGuid(),
+                    Genre = genre,
+                    Title = title
+                };
+
+                return movie;
+            }
         }
     }
 }
