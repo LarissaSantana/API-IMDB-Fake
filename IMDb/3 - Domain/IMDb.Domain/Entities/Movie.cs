@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using IMDb.Domain.Commands;
 using IMDb.Domain.DomainObjects;
 using IMDb.Domain.Enums;
 using System;
@@ -56,11 +57,11 @@ namespace IMDb.Domain.Entities
 
         public static class MovieFactory
         {
-            public static Movie Create(Genre genre, string title)
+            public static Movie Create(Genre genre, string title, Guid? id = null)
             {
                 var movie = new Movie
                 {
-                    Id = Guid.NewGuid(),
+                    Id = id ?? Guid.NewGuid(),
                     Genre = genre,
                     Title = title
                 };

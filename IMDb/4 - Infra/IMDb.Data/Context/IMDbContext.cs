@@ -9,7 +9,7 @@ namespace IMDb.Data.Context
         public IMDbContext(DbContextOptions<IMDbContext> options) : base(options) { }
 
         public DbSet<Movie> Movies { get; set; }
-        public DbSet<RatingOfMovie> MovieRatings { get; set; }
+        public DbSet<RatingOfMovie> RatingOfMovies { get; set; }
         public DbSet<Cast> Cast { get; set; }
         public DbSet<CastOfMovie> CastOfMovies { get; set; }
         public DbSet<User> Users { get; set; }

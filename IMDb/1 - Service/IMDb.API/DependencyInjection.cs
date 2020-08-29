@@ -5,6 +5,7 @@ using IMDb.Domain.Commands;
 using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Core.Data;
 using IMDb.Domain.Core.Notifications;
+using IMDb.Domain.Events;
 using IMDb.Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,8 @@ namespace IMDb.API
             services.AddScoped<IRequestHandler<AddMovieCommand, bool>, MovieCommandHandler>();
             services.AddScoped<IRequestHandler<AddRatingOfMovieCommand, bool>, MovieCommandHandler>();
             services.AddScoped<IRequestHandler<AddMeanCommand, bool>, MovieCommandHandler>();
+
+            services.AddScoped<INotificationHandler<RatingOfMovieAddedEvent>, MovieEventHandler>();
         }
     }
 }

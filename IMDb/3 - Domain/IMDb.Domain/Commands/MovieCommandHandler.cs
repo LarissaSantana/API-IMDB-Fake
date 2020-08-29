@@ -11,6 +11,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using static IMDb.Domain.Entities.Cast;
+using static IMDb.Domain.Entities.CastOfMovie;
+using static IMDb.Domain.Entities.Movie;
+using static IMDb.Domain.Entities.RatingOfMovie;
 
 namespace IMDb.Domain.Commands
 {
@@ -30,16 +34,16 @@ namespace IMDb.Domain.Commands
 
         public async Task<bool> Handle(AddMovieCommand message, CancellationToken cancellationToken)
         {
-            var movie = Movie.MovieFactory.Create(message.Genre, message.Title);
+            var movie = MovieFactory.Create(message.Genre, message.Title);
             var castOfMovieList = new List<CastOfMovie>();
 
             foreach (var cast in message.Cast)
             {
-                var castModel = Cast.CastFactory.Create(cast.Name, cast.CastType);
+                var castModel = CastFactory.Create(cast.Name, cast.CastType);
                 if (!castModel.IsValid())
                     NotifyValidationErrors(castModel.ValidationResult);
 
-                var castOfMovieModel = CastOfMovie.CastOfMovieFactory.Create(movie.Id, castModel.Id);
+                var castOfMovieModel = CastOfMovieFactory.Create(movie.Id, castModel.Id);
                 castOfMovieModel.AddCast(castModel);
                 if (!castOfMovieModel.IsValid())
                     NotifyValidationErrors(castOfMovieModel.ValidationResult);
@@ -77,7 +81,7 @@ namespace IMDb.Domain.Commands
 
             if (ratingOfMovieRepo == null)
             {
-                var ratingOfMovie = RatingOfMovie.RatingOfMovieFactory
+                var ratingOfMovie = RatingOfMovieFactory
                     .Create(message.Rate, message.MovieId, message.UserId);
 
                 if (!ratingOfMovie.IsValid())
@@ -126,9 +130,11 @@ namespace IMDb.Domain.Commands
             var movie = ratingOfMovie.Select(x => x.Movie).FirstOrDefault();
 
             if (movie == null) return false;
-            movie.AddMean((float)mean);
 
-            _movieRepository.Update(movie);
+            var movieToUpdate = MovieFactory.Create(movie.Genre, movie.Title, movie.Id);
+            movieToUpdate.AddMean((float)mean);
+
+            _movieRepository.Update(movieToUpdate);
 
             if (Commit()) return await Task.FromResult(true);
 
