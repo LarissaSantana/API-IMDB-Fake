@@ -1,4 +1,5 @@
-﻿using IMDb.Data.Core;
+﻿using IMDb.Application.Services;
+using IMDb.Data.Core;
 using IMDb.Data.Repositories;
 using IMDb.Domain.Commands;
 using IMDb.Domain.Core.Bus;
@@ -19,6 +20,8 @@ namespace IMDb.API
 
             services.AddScoped<IMovieRepository, MovieRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<IMovieAppService, MovieAppService>();
 
             services.AddScoped<IRequestHandler<AddMovieCommand, bool>, MovieCommandHandler>();
         }

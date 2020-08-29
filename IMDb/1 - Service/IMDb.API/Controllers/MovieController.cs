@@ -15,7 +15,6 @@ namespace IMDb.API.Controllers
             _movieAppService = movieAppService;
         }
 
-
         [HttpPost]
         public IActionResult CreateMovie([FromBody] AddMovieViewModel viewModel)
         {
