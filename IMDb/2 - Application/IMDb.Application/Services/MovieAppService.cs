@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using IMDb.Application.ViewModels;
 using IMDb.Application.ViewModels.Add;
 using IMDb.Domain.Commands;
 using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Repositories;
+using System;
 
 namespace IMDb.Application.Services
 {
@@ -29,6 +31,12 @@ namespace IMDb.Application.Services
         {
             var map = _mapper.Map<AddRatingOfMovieCommand>(viewModel);
             _bus.SendCommand(map);
+        }
+
+        public MovieViewModel GetMovieById(Guid id)
+        {
+            var movie = _movieRepository.GetMovieById(id);
+            return _mapper.Map<MovieViewModel>(movie);
         }
     }
 }

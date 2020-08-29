@@ -8,6 +8,8 @@ namespace IMDb.Domain.Repositories
 {
     public interface IMovieRepository : IRepository<Movie>
     {
+        Movie GetMovieById(Guid id);
+
         //Cast
         public void AddCast(Cast cast);
 

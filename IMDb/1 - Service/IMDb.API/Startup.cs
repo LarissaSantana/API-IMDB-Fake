@@ -26,6 +26,12 @@ namespace IMDb.API
             services.AddDbContext<IMDbContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("IMDbConnection")));
 
+            services.AddControllers().AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.ReferenceLoopHandling
+                   = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
             

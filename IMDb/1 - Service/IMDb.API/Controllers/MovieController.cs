@@ -1,6 +1,7 @@
 ﻿using IMDb.Application.Services;
 using IMDb.Application.ViewModels.Add;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,6 +39,14 @@ namespace IMDb.API.Controllers
 
             _movieAppService.AddRatingOfMovie(viewModel);
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public IActionResult GetMovieById(Guid id)
+        {
+            var movie = _movieAppService.GetMovieById(id);
+            return Ok(movie);
         }
 
         private List<string> GetErrorListFromModelState()

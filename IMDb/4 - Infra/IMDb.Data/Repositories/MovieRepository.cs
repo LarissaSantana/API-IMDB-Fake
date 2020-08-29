@@ -2,8 +2,10 @@
 using IMDb.Data.Core;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace IMDb.Data.Repositories
@@ -20,6 +22,15 @@ namespace IMDb.Data.Repositories
         public void AddCast(Cast cast)
         {
             Add<Cast>(cast);
+        }
+
+        public Movie GetMovieById(Guid id)
+        {
+            return _context.Set<Movie>()
+                           .Where(x => x.Id.Equals(id))
+                           .Include(x => x.CastOfMovies)
+                               .ThenInclude(x => x.Cast)
+                           .FirstOrDefault();
         }
 
         public void AddRatingOfMovie(RatingOfMovie ratingOfMovie)
