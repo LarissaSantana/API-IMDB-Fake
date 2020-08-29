@@ -1,11 +1,11 @@
 ﻿using IMDb.Domain.Enums;
 using System;
 
-namespace IMDb.Application.ViewModels
+namespace IMDb.Application.ViewModels.Return
 {
-    public class CastOfMovieViewModel
+    public class CastViewModel
     {
-        public Guid CastOfMovieId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public CastType CastType { get; set; }
     }
