@@ -66,7 +66,9 @@ namespace IMDb.Application.Services
             }
 
             var movies = _movieRepository.GetMovies(predicate);
-            return _mapper.Map<IEnumerable<MovieWithRatingViewModel>>(movies);
+            var map = _mapper.Map<IEnumerable<MovieWithRatingViewModel>>(movies);
+            var moviesViewModel = map.OrderByDescending(x => x.NumberOfVotes).ThenBy(x => x.Title);
+            return moviesViewModel;
         }
     }
 }

@@ -75,7 +75,7 @@ namespace IMDb.Domain.Commands
         public async Task<bool> Handle(AddRatingOfMovieCommand message, CancellationToken cancellationToken)
         {
             var ratingOfMovieRepo = _movieRepository.GetRatingOfMoviesByFilters(mr =>
-                    mr.UserId == message.UserId && mr.MovieId == mr.MovieId).FirstOrDefault();
+                    mr.UserId == message.UserId && mr.MovieId == message.MovieId).FirstOrDefault();
 
             RatingOfMovieAddedEvent ratingOfMovieAddedEvent = null;
 

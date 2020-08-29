@@ -37,9 +37,12 @@ namespace IMDb.Domain.Entities
                                       castOfMovies.Where(x => x.Cast.CastType == CastType.Director).Count() == 1)
                 .WithMessage("O Filme deve ter um Diretor!");
 
-            RuleFor(movie => movie.CastOfMovies)
-                .Must(castOfMovies => castOfMovies.Any(x => x.Cast.CastType == CastType.Actor))
-                .WithMessage("O Filme deve ter pelo menos um Ator!");
+            if (Genre != Genre.Animation)
+            {
+                RuleFor(movie => movie.CastOfMovies)
+                    .Must(castOfMovies => castOfMovies.Any(x => x.Cast.CastType == CastType.Actor))
+                    .WithMessage("O Filme deve ter pelo menos um Ator!");
+            }
 
             ValidationResult = Validate(this);
             return ValidationResult.IsValid;

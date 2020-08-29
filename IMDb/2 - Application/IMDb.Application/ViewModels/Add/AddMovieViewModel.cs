@@ -13,7 +13,6 @@ namespace IMDb.Application.ViewModels.Add
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public Genre Genre { get; set; }
 
-        [MinLength(2, ErrorMessage = "At least one item needs to be reported")]
         public List<AddCastViewModel> Casts { get; set; }
     }
 }
