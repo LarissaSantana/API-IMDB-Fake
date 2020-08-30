@@ -1,4 +1,5 @@
 ﻿using IMDb.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,6 +14,6 @@ namespace IMDb.Application.ViewModels.Add
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public Genre Genre { get; set; }
 
-        public List<AddCastViewModel> Casts { get; set; }
+        public List<Guid> CastIds { get; set; }
     }
 }

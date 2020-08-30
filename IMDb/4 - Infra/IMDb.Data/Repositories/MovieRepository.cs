@@ -31,7 +31,13 @@ namespace IMDb.Data.Repositories
                            .Where(x => x.Id.Equals(id))
                            .Include(x => x.CastOfMovies)
                                .ThenInclude(x => x.Cast)
+                           .AsNoTracking()
                            .FirstOrDefault();
+        }
+
+        public IEnumerable<Cast> GetCast(Expression<Func<Cast, bool>> predicate)
+        {
+            return GetByFilters<Cast>(predicate);
         }
 
         public void AddRatingOfMovie(RatingOfMovie ratingOfMovie)

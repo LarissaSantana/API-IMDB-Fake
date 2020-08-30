@@ -39,9 +39,14 @@ namespace IMDb.Domain.Core.Messages
             NotifyValidationErrors(validationResult);
         }
 
+        protected bool HasNotifications()
+        {
+            return _notifications.HasNotifications();
+        }
+
         public bool Commit()
         {
-            if (_notifications.HasNotifications()) return false;
+            if (HasNotifications()) return false;
             if (_uow.Commit()) return true;
 
             NotifyValidationErrors("Commit - We had a problem during saving your data.");

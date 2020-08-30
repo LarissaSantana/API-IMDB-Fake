@@ -15,8 +15,8 @@ namespace IMDb.Domain.Entities
         public CastOfMovie(Guid id, Guid movieId, Guid castId)
         {
             Id = id;
-            MovieId = id;
-            CastId = id;
+            MovieId = movieId;
+            CastId = castId;
         }
 
         public override bool IsValid()

@@ -14,6 +14,7 @@ namespace IMDb.Domain.Repositories
         Pagination<Movie> GetMoviesWithPagination(Expression<Func<Movie, bool>> predicate, int pageNumber, int pageSize);
 
         //Cast
+        IEnumerable<Cast> GetCast(Expression<Func<Cast, bool>> predicate);
         public void AddCast(Cast cast);
 
         //CastOfMovie

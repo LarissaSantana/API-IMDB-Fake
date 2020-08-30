@@ -1,5 +1,6 @@
 ﻿using IMDb.Domain.Core.Messages;
 using IMDb.Domain.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace IMDb.Domain.Commands
@@ -8,13 +9,13 @@ namespace IMDb.Domain.Commands
     {
         public string Title { get; private set; }
         public Genre Genre { get; private set; }
-        public List<AddCastCommand> Cast { get; private set; }
+        public List<Guid> CastIds { get; private set; }
 
-        public AddMovieCommand(string title, Genre genre, List<AddCastCommand> cast)
+        public AddMovieCommand(string title, Genre genre, List<Guid> castIds)
         {
             Title = title;
             Genre = genre;
-            Cast = cast;
+            CastIds = castIds;
         }
     }
 }

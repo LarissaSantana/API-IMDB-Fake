@@ -32,16 +32,19 @@ namespace IMDb.Domain.Entities
         public override bool IsValid()
         {
             //TODO: traduzir mensagem!
-            RuleFor(movie => movie.CastOfMovies)
-                .Must(castOfMovies => castOfMovies.Any(x => x.Cast.CastType == CastType.Director) &&
-                                      castOfMovies.Where(x => x.Cast.CastType == CastType.Director).Count() == 1)
-                .WithMessage("O Filme deve ter um Diretor!");
-
-            if (Genre != Genre.Animation)
+            if (CastOfMovies.Any() && CastOfMovies.Any(x => x.Cast != null))
             {
                 RuleFor(movie => movie.CastOfMovies)
-                    .Must(castOfMovies => castOfMovies.Any(x => x.Cast.CastType == CastType.Actor))
-                    .WithMessage("O Filme deve ter pelo menos um Ator!");
+                    .Must(castOfMovies => castOfMovies.Any(x => x.Cast.CastType == CastType.Director) &&
+                                          castOfMovies.Where(x => x.Cast.CastType == CastType.Director).Count() == 1)
+                    .WithMessage("O Filme deve ter um Diretor!");
+
+                if (Genre != Genre.Animation)
+                {
+                    RuleFor(movie => movie.CastOfMovies)
+                        .Must(castOfMovies => castOfMovies.Any(x => x.Cast.CastType == CastType.Actor))
+                        .WithMessage("O Filme deve ter pelo menos um Ator!");
+                }
             }
 
             ValidationResult = Validate(this);

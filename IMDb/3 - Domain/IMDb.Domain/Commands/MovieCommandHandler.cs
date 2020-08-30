@@ -3,10 +3,13 @@ using IMDb.Domain.Core.Data;
 using IMDb.Domain.Core.Messages;
 using IMDb.Domain.Core.Notifications;
 using IMDb.Domain.Entities;
+using IMDb.Domain.Enums;
 using IMDb.Domain.Events;
 using IMDb.Domain.Repositories;
 using MediatR;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,17 +38,15 @@ namespace IMDb.Domain.Commands
 
         public async Task<bool> Handle(AddMovieCommand message, CancellationToken cancellationToken)
         {
+            ValidateCastOfMovie(message);
+            if (HasNotifications()) return false;
+
             var movie = MovieFactory.Create(message.Genre, message.Title);
             var castOfMovieList = new List<CastOfMovie>();
 
-            foreach (var cast in message.Cast)
+            foreach (var castId in message.CastIds)
             {
-                var castModel = CastFactory.Create(cast.Name, cast.CastType);
-                if (!castModel.IsValid())
-                    NotifyValidationErrors(castModel.ValidationResult);
-
-                var castOfMovieModel = CastOfMovieFactory.Create(movie.Id, castModel.Id);
-                castOfMovieModel.AddCast(castModel);
+                var castOfMovieModel = CastOfMovieFactory.Create(movie.Id, castId);
                 if (!castOfMovieModel.IsValid())
                     NotifyValidationErrors(castOfMovieModel.ValidationResult);
 
@@ -59,6 +60,23 @@ namespace IMDb.Domain.Commands
             _movieRepository.Add(movie);
 
             return await Task.FromResult(Commit());
+        }
+
+        private void ValidateCastOfMovie(AddMovieCommand message)
+        {
+            var casts = _movieRepository.GetCast(it => message.CastIds.Contains(it.Id)).ToList();
+            var castsNotFound = message.CastIds.Except(casts.Select(x => x.Id));
+            if (castsNotFound.Any())
+                castsNotFound.ToList().ForEach(x => NotifyValidationErrors($"Cast not found. Id: {x}"));
+
+            if (casts.Any())
+            {
+                if (!casts.Any(x => x.CastType == CastType.Director))
+                    NotifyValidationErrors("O Filme deve ter pelo menos um Diretor!");
+
+                if (message.Genre != Genre.Animation && !casts.Any(x => x.CastType == CastType.Actor))
+                    NotifyValidationErrors("O Filme deve ter pelo menos um Ator!");
+            }
         }
 
         public async Task<bool> Handle(AddCastCommand message, CancellationToken cancellationToken)
@@ -135,8 +153,8 @@ namespace IMDb.Domain.Commands
             movieToUpdate.AddMean((float)mean);
 
             _movieRepository.Update(movieToUpdate);
-            
-            return await Task.FromResult(Commit());            
+
+            return await Task.FromResult(Commit());
         }
     }
 }
