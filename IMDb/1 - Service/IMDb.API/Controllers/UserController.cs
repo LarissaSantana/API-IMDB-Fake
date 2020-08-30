@@ -32,7 +32,8 @@ namespace IMDb.API.Controllers
                 return NotFound(new { message = "Invalid username or password." });
 
             var token = TokenService.GenerateToken(user);
-            return GetResponse(token);
+
+            return GetResponse(new { token = token });
         }
 
         [HttpPost]
@@ -78,7 +79,7 @@ namespace IMDb.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "e33a5da4-4c46-4f0e-8ef7-8d01a12f9884")] 
+        [Authorize(Roles = "e33a5da4-4c46-4f0e-8ef7-8d01a12f9884")]
         [Route("getNonActiveCommonUsers")]
         public IActionResult GetNonActiveCommonUsers(int pageNumber = 1, int pageSize = 10)
         {
