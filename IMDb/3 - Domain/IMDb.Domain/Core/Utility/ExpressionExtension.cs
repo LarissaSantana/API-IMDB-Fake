@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace IMDb.Domain.Core.Extension
+namespace IMDb.Domain.Utility
 {
     /// <summary>
     /// 
