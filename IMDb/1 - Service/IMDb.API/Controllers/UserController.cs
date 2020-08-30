@@ -3,6 +3,7 @@ using IMDb.Application.ViewModels;
 using IMDb.Application.ViewModels.Add;
 using IMDb.Domain.Core.Notifications;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 
 namespace IMDb.API.Controllers
@@ -30,6 +31,7 @@ namespace IMDb.API.Controllers
             return GetResponse();
         }
 
+        //TODO: validar usuário logado.
         [HttpPut]
         public IActionResult UpdateUser([FromBody] UpdateUserViewModel viewModel)
         {
@@ -38,6 +40,24 @@ namespace IMDb.API.Controllers
                 return BadRequest(errors);
 
             _userAppService.UpdateUser(viewModel);
+            return GetResponse();
+        }
+
+        //TODO: validar usuário logado.
+        [HttpPut]
+        [Route("deactivate")]
+        public IActionResult DeactivateUser(Guid id)
+        {
+            _userAppService.ChangeStatus(id, false);
+            return GetResponse();
+        }
+
+        //TODO: validar usuário logado.
+        [HttpPut]
+        [Route("activate")]
+        public IActionResult ActivateUser(Guid id)
+        {
+            _userAppService.ChangeStatus(id, true);
             return GetResponse();
         }
     }

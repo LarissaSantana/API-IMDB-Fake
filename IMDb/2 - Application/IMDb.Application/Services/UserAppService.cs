@@ -5,6 +5,7 @@ using IMDb.Application.ViewModels.Add;
 using IMDb.Domain.Commands.User;
 using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Repositories;
+using System;
 
 namespace IMDb.Application.Services
 {
@@ -25,6 +26,12 @@ namespace IMDb.Application.Services
         {
             var map = _mapper.Map<AddUserCommand>(viewModel);
             _bus.SendCommand(map);
+        }
+
+        public void ChangeStatus(Guid userId, bool status)
+        {
+            var command = new ChangeStatusCommand(userId, status);
+            _bus.SendCommand(command);
         }
 
         public void UpdateUser(UpdateUserViewModel viewModel)

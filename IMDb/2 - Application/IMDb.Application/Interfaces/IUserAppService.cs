@@ -1,5 +1,6 @@
 ﻿using IMDb.Application.ViewModels;
 using IMDb.Application.ViewModels.Add;
+using System;
 
 namespace IMDb.Application.Interfaces
 {
@@ -7,5 +8,6 @@ namespace IMDb.Application.Interfaces
     {
         void AddUser(AddUserViewModel viewModel);
         void UpdateUser(UpdateUserViewModel viewModel);
+        void ChangeStatus(Guid userId, bool status);
     }
 }

@@ -23,6 +23,11 @@ namespace IMDb.Domain.Entities
             Name = name;
         }
 
+        public void ChangeStatus(bool status)
+        {
+            Status = status;
+        }
+
         public User(Guid id, string name, bool status, string password, Guid roleId)
         {
             Id = id;

@@ -13,7 +13,8 @@ namespace IMDb.Domain.Commands.User
 {
     public class UserCommandHandler : CommandHandler,
         IRequestHandler<AddUserCommand, bool>,
-        IRequestHandler<UpdateUserCommand, bool>
+        IRequestHandler<UpdateUserCommand, bool>,
+        IRequestHandler<ChangeStatusCommand, bool>
     {
         private readonly IUserRepository _userRepository;
         public UserCommandHandler(IUserRepository userRepository, IUnitOfWork uow, IMediatorHandler bus,
@@ -51,6 +52,24 @@ namespace IMDb.Domain.Commands.User
             }
 
             user.ChangeName(message.Name);
+
+            if (!user.IsValid()) NotifyValidationErrors(user.ValidationResult);
+
+            _userRepository.Update(user);
+
+            return await Task.FromResult(Commit());
+        }
+
+        public async Task<bool> Handle(ChangeStatusCommand message, CancellationToken cancellationToken)
+        {
+            var user = _userRepository.GetById(message.Id);
+            if (user == null)
+            {
+                NotifyValidationErrors("User not found.");
+                return false;
+            }
+
+            user.ChangeStatus(message.Status);
 
             if (!user.IsValid()) NotifyValidationErrors(user.ValidationResult);
 
