@@ -17,7 +17,7 @@ namespace IMDb.Domain.Entities
         {
             RatingOfMovies = new List<RatingOfMovie>();
         }
-
+    
         public User(Guid id, string name, bool status, string password)
         {
             Id = id;
