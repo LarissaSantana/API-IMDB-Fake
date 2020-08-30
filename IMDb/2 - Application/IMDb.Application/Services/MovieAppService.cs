@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
+using IMDb.Application.Services.Interfaces;
 using IMDb.Application.ViewModels.Add;
 using IMDb.Application.ViewModels.Filters;
 using IMDb.Application.ViewModels.Return;
-using IMDb.Domain.Commands;
+using IMDb.Domain.Commands.Movie;
 using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Core.Extension;
 using IMDb.Domain.Core.Pagination;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 

@@ -4,7 +4,7 @@ using IMDb.Application.ViewModels.Return;
 using IMDb.Domain.Core.Pagination;
 using System;
 
-namespace IMDb.Application.Services
+namespace IMDb.Application.Services.Interfaces
 {
     public interface IMovieAppService
     {

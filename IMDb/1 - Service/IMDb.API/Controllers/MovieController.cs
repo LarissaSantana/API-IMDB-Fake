@@ -1,4 +1,4 @@
-﻿using IMDb.Application.Services;
+﻿using IMDb.Application.Services.Interfaces;
 using IMDb.Application.ViewModels.Add;
 using IMDb.Application.ViewModels.Filters;
 using IMDb.Domain.Core.Notifications;
