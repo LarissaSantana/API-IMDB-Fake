@@ -74,7 +74,7 @@ namespace IMDb.Domain.Commands.Movie
                     NotifyValidationErrors("The movie must have at least one director!");
 
                 if (message.Genre != Genre.Animation && !casts.Any(x => x.CastType == CastType.Actor))
-                    NotifyValidationErrors("c");
+                    NotifyValidationErrors("The movie must have at least one actor!");
             }
         }
 
@@ -99,7 +99,8 @@ namespace IMDb.Domain.Commands.Movie
             }
 
             var ratingOfMovieRepo = _movieRepository.GetRatingOfMoviesByFilters(mr =>
-                    mr.UserId == userAuthenticatedId.Value && mr.MovieId == message.MovieId).FirstOrDefault();
+                    mr.UserId == userAuthenticatedId.Value && 
+                    mr.MovieId == message.MovieId).FirstOrDefault();
 
             RatingOfMovieAddedEvent ratingOfMovieAddedEvent = null;
 

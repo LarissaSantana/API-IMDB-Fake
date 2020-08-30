@@ -28,13 +28,21 @@ namespace IMDb.Domain.Entities
             return ValidationResult.IsValid;
         }
 
+        public void AddCastOfMovies(List<CastOfMovie> castOfMovies)
+        {
+            if (castOfMovies == null)
+                CastOfMovies = new List<CastOfMovie>();
+            else
+                CastOfMovies = castOfMovies;
+        }
+
         public static class CastFactory
         {
-            public static Cast Create(string name, CastType castType)
+            public static Cast Create(string name, CastType castType, Guid? id = null)
             {
                 var cast = new Cast
                 {
-                    Id = Guid.NewGuid(),
+                    Id = id ?? Guid.NewGuid(),
                     Name = name,
                     CastType = castType
                 };
