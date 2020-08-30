@@ -6,7 +6,6 @@ using IMDb.Domain.Entities;
 using IMDb.Domain.Events;
 using IMDb.Domain.Repositories;
 using MediatR;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -21,7 +20,9 @@ namespace IMDb.Domain.Commands
     public class MovieCommandHandler : CommandHandler,
         IRequestHandler<AddMovieCommand, bool>,
         IRequestHandler<AddRatingOfMovieCommand, bool>,
-        IRequestHandler<AddMeanCommand, bool>
+        IRequestHandler<AddMeanCommand, bool>,
+        IRequestHandler<AddCastCommand, bool>
+
     {
         private readonly IMovieRepository _movieRepository;
 
@@ -57,20 +58,19 @@ namespace IMDb.Domain.Commands
 
             _movieRepository.Add(movie);
 
-            if (Commit()) return await Task.FromResult(true);
-
-            return false;
+            return await Task.FromResult(Commit());
         }
 
-        //public async Task<bool> Handle(AddCastCommand message, CancellationToken cancellationToken)
-        //{
+        public async Task<bool> Handle(AddCastCommand message, CancellationToken cancellationToken)
+        {
+            var cast = CastFactory.Create(message.Name, message.CastType);
+            if (!cast.IsValid())
+                NotifyValidationErrors(cast.ValidationResult);
 
-        //    var cast = Cast.CastFactory.Create(message.Name, message.CastType);
+            _movieRepository.AddCast(cast);
 
-        //    _movieRepository.AddCast(cast);
-
-        //    return await Task.FromResult(_uow.Commit());
-        //}
+            return await Task.FromResult(Commit());
+        }
 
         public async Task<bool> Handle(AddRatingOfMovieCommand message, CancellationToken cancellationToken)
         {
@@ -135,10 +135,8 @@ namespace IMDb.Domain.Commands
             movieToUpdate.AddMean((float)mean);
 
             _movieRepository.Update(movieToUpdate);
-
-            if (Commit()) return await Task.FromResult(true);
-
-            return false;
+            
+            return await Task.FromResult(Commit());            
         }
     }
 }

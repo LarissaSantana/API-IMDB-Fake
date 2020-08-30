@@ -10,6 +10,7 @@ namespace IMDb.Application.Services
     {
         void AddMovie(AddMovieViewModel viewModel);
         void AddRatingOfMovie(AddRatingOfMovieViewModel viewModel);
+        void AddCast(AddCastViewModel viewModel);
         MovieViewModel GetMovieById(Guid id);
         Pagination<MovieWithRatingViewModel> GetMoviesWithPagination(MovieFilterViewModel viewModel, int pageNumber, int pageSize);
     }

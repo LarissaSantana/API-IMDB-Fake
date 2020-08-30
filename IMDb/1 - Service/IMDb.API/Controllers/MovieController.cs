@@ -24,7 +24,7 @@ namespace IMDb.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateMovie([FromBody] AddMovieViewModel viewModel)
+        public IActionResult AddMovie([FromBody] AddMovieViewModel viewModel)
         {
             var errors = GetErrorListFromModelState();
             if (errors.Any())
@@ -36,13 +36,25 @@ namespace IMDb.API.Controllers
 
         [HttpPost]
         [Route("movieRating")]
-        public IActionResult CreateMovieRating([FromBody] AddRatingOfMovieViewModel viewModel)
+        public IActionResult AddRatingOfMovie([FromBody] AddRatingOfMovieViewModel viewModel)
         {
             var errors = GetErrorListFromModelState();
             if (errors.Any())
                 return BadRequest(errors);
 
             _movieAppService.AddRatingOfMovie(viewModel);
+            return GetResponse();
+        }
+
+        [HttpPost]
+        [Route("cast")]
+        public IActionResult AddCast([FromBody] AddCastViewModel viewModel)
+        {
+            var errors = GetErrorListFromModelState();
+            if (errors.Any())
+                return BadRequest(errors);
+
+            _movieAppService.AddCast(viewModel);
             return GetResponse();
         }
 

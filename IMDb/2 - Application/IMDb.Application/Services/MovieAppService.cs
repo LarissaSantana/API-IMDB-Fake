@@ -41,6 +41,12 @@ namespace IMDb.Application.Services
             _bus.SendCommand(map);
         }
 
+        public void AddCast(AddCastViewModel viewModel)
+        {
+            var map = _mapper.Map<AddCastCommand>(viewModel);
+            _bus.SendCommand(map);
+        }
+
         public MovieViewModel GetMovieById(Guid id)
         {
             var movie = _movieRepository.GetMovieById(id);
