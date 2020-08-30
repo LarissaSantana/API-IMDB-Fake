@@ -5,10 +5,9 @@ using IMDb.Application.ViewModels.Filters;
 using IMDb.Application.ViewModels.Return;
 using IMDb.Domain.Commands.Movie;
 using IMDb.Domain.Core.Bus;
-using IMDb.Domain.Core.Extension;
-using IMDb.Domain.Core.Pagination;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
+using IMDb.Domain.Utility;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -53,7 +52,7 @@ namespace IMDb.Application.Services
             return _mapper.Map<MovieViewModel>(movie);
         }
 
-        public Pagination<MovieWithRatingViewModel> GetMoviesWithPagination(MovieFilterViewModel viewModel, int pageNumber, int pageSize)
+        public Pagination<MovieWithRatingViewModel> GetMovies(MovieFilterViewModel viewModel, int pageNumber, int pageSize)
         {
             Expression<Func<Movie, bool>> predicate = ExpressionExtension.Query<Movie>();
 
@@ -66,8 +65,8 @@ namespace IMDb.Application.Services
             if (viewModel.CastIds != null && viewModel.CastIds.Any())
                 predicate = predicate.And(it => it.CastOfMovies.Any(x => viewModel.CastIds.Contains(x.Cast.Id)));
 
-            var moviePagination = _movieRepository.GetMoviesWithPagination(predicate, pageNumber, pageSize);
-            var map = _mapper.Map<Pagination<MovieWithRatingViewModel>>(moviePagination);
+            var moviesPagination = _movieRepository.GetMoviesWithPagination(predicate, pageNumber, pageSize);
+            var map = _mapper.Map<Pagination<MovieWithRatingViewModel>>(moviesPagination);
             return map;
         }
     }

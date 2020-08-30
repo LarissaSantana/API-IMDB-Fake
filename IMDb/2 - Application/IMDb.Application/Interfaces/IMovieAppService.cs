@@ -1,7 +1,7 @@
 ﻿using IMDb.Application.ViewModels.Add;
 using IMDb.Application.ViewModels.Filters;
 using IMDb.Application.ViewModels.Return;
-using IMDb.Domain.Core.Pagination;
+using IMDb.Domain.Utility;
 using System;
 
 namespace IMDb.Application.Services.Interfaces
@@ -12,6 +12,6 @@ namespace IMDb.Application.Services.Interfaces
         void AddRatingOfMovie(AddRatingOfMovieViewModel viewModel);
         void AddCast(AddCastViewModel viewModel);
         MovieViewModel GetMovieById(Guid id);
-        Pagination<MovieWithRatingViewModel> GetMoviesWithPagination(MovieFilterViewModel viewModel, int pageNumber, int pageSize);
+        Pagination<MovieWithRatingViewModel> GetMovies(MovieFilterViewModel viewModel, int pageNumber, int pageSize);
     }
 }

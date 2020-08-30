@@ -1,6 +1,6 @@
 ﻿using IMDb.Domain.Core.Data;
-using IMDb.Domain.Core.Pagination;
 using IMDb.Domain.Entities;
+using IMDb.Domain.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

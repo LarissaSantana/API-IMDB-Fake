@@ -1,8 +1,8 @@
 ﻿using IMDb.Data.Context;
 using IMDb.Data.Core;
-using IMDb.Domain.Core.Pagination;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
+using IMDb.Domain.Utility;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -50,14 +50,19 @@ namespace IMDb.Data.Repositories
             Update<RatingOfMovie>(ratingOfMovie);
         }
 
+        /// <summary>
+        /// Returns a list of movies ordered by number of votes and title with pagination.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public Pagination<Movie> GetMoviesWithPagination(
             Expression<Func<Movie, bool>> predicate,
             int pageNumber,
             int pageSize)
         {
-            IQueryable<Movie> query;
-
-            query = _context.Set<Movie>()
+            var query = _context.Set<Movie>()
                             .Include(x => x.CastOfMovies)
                                 .ThenInclude(x => x.Cast)
                             .Include(x => x.RatingOfMovies)
@@ -65,7 +70,7 @@ namespace IMDb.Data.Repositories
                                 .ThenBy(x => x.Title)
                             .AsNoTracking();
 
-            var skipNumber = (pageNumber - 1) * pageSize;
+            var skipNumber = Pagination<Movie>.CalculateSkipNumber(pageNumber, pageSize);
             var totalItemCount = query.Where(predicate).Count();
             var movies = query.Where(predicate).Skip(skipNumber).Take(pageSize).ToList();
 
