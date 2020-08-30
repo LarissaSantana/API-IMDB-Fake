@@ -7,8 +7,10 @@ using IMDb.Domain.Enums;
 using IMDb.Domain.Events;
 using IMDb.Domain.Repositories;
 using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using static IMDb.Domain.Entities.Cast;
@@ -91,15 +93,22 @@ namespace IMDb.Domain.Commands.Movie
 
         public async Task<bool> Handle(AddRatingOfMovieCommand message, CancellationToken cancellationToken)
         {
+            var userAuthenticatedId = _movieRepository.GetUserAuthenticatedId();
+            if (!userAuthenticatedId.HasValue || userAuthenticatedId == Guid.Empty)
+            {
+                NotifyValidationErrors("Invalid user");
+                return false;
+            }
+
             var ratingOfMovieRepo = _movieRepository.GetRatingOfMoviesByFilters(mr =>
-                    mr.UserId == message.UserId && mr.MovieId == message.MovieId).FirstOrDefault();
+                    mr.UserId == userAuthenticatedId.Value && mr.MovieId == message.MovieId).FirstOrDefault();
 
             RatingOfMovieAddedEvent ratingOfMovieAddedEvent = null;
 
             if (ratingOfMovieRepo == null)
             {
                 var ratingOfMovie = RatingOfMovieFactory
-                    .Create(message.Rate, message.MovieId, message.UserId);
+                    .Create(message.Rate, message.MovieId, userAuthenticatedId.Value);
 
                 if (!ratingOfMovie.IsValid())
                 {

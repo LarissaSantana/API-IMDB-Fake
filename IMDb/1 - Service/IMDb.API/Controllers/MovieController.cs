@@ -49,7 +49,7 @@ namespace IMDb.API.Controllers
 
         [HttpPost]
         [Route("ratingOfMovie")]
-        [Authorize(Roles = "e33a5da4-4c46-4f0e-8ef7-8d01a12f9884")]
+        [Authorize(Roles = "04f1d204-4121-44ec-88bd-4b3d433fbaf6")]
         public IActionResult AddRatingOfMovie([FromBody] AddRatingOfMovieViewModel viewModel)
         {
             var errors = GetErrorListFromModelState();

@@ -11,7 +11,5 @@ namespace IMDb.Application.ViewModels.Movie.Add
 
         [Required(ErrorMessage = "The MovieId is Required")]
         public Guid MovieId { get; set; }
-
-        public Guid UserId { get; set; }
     }
 }
