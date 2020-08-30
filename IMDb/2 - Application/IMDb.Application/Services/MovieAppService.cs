@@ -57,23 +57,14 @@ namespace IMDb.Application.Services
         {
             Expression<Func<Movie, bool>> predicate = ExpressionExtension.Query<Movie>();
 
-            if (viewModel != null)
-            {
-                if (viewModel.Genre.HasValue)
-                    predicate = predicate.And(it => it.Genre == viewModel.Genre);
+            if (viewModel.Genre.HasValue)
+                predicate = predicate.And(it => it.Genre == viewModel.Genre);
 
-                if (!string.IsNullOrWhiteSpace(viewModel.Title))
-                    predicate = predicate.And(it => it.Title.ToLower().Equals(viewModel.Title.ToLower()));
+            if (!string.IsNullOrWhiteSpace(viewModel.Title))
+                predicate = predicate.And(it => it.Title.ToLower().Equals(viewModel.Title.ToLower()));
 
-                if (viewModel.CastList != null && viewModel.CastList.Any())
-                {
-                    foreach (var cast in viewModel.CastList)
-                    {
-                        predicate = predicate.And(it => it.CastOfMovies
-                            .Any(x => x.Cast.Name.Equals(cast.Name) && x.Cast.CastType == cast.CastType));
-                    }
-                }
-            }
+            if (viewModel.CastIds != null && viewModel.CastIds.Any())
+                predicate = predicate.And(it => it.CastOfMovies.Any(x => viewModel.CastIds.Contains(x.Cast.Id)));
 
             var moviePagination = _movieRepository.GetMoviesWithPagination(predicate, pageNumber, pageSize);
             var map = _mapper.Map<Pagination<MovieWithRatingViewModel>>(moviePagination);
