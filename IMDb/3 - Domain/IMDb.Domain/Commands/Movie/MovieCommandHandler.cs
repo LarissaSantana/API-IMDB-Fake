@@ -7,9 +7,7 @@ using IMDb.Domain.Enums;
 using IMDb.Domain.Events;
 using IMDb.Domain.Repositories;
 using MediatR;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +16,7 @@ using static IMDb.Domain.Entities.CastOfMovie;
 using static IMDb.Domain.Entities.Movie;
 using static IMDb.Domain.Entities.RatingOfMovie;
 
-namespace IMDb.Domain.Commands
+namespace IMDb.Domain.Commands.Movie
 {
     public class MovieCommandHandler : CommandHandler,
         IRequestHandler<AddMovieCommand, bool>,
@@ -69,6 +67,7 @@ namespace IMDb.Domain.Commands
             if (castsNotFound.Any())
                 castsNotFound.ToList().ForEach(x => NotifyValidationErrors($"Cast not found. Id: {x}"));
 
+            //TODO: traduzir!
             if (casts.Any())
             {
                 if (!casts.Any(x => x.CastType == CastType.Director))

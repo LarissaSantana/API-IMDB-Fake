@@ -3,7 +3,7 @@ using IMDb.Domain.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace IMDb.Domain.Commands
+namespace IMDb.Domain.Commands.Movie
 {
     public class AddMovieCommand : Command
     {

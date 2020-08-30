@@ -1,7 +1,7 @@
 ﻿using IMDb.Application.Services;
 using IMDb.Data.Core;
 using IMDb.Data.Repositories;
-using IMDb.Domain.Commands;
+using IMDb.Domain.Commands.Movie;
 using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Core.Data;
 using IMDb.Domain.Core.Notifications;

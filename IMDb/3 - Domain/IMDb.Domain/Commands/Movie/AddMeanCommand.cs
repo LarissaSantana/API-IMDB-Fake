@@ -1,7 +1,7 @@
 ﻿using IMDb.Domain.Core.Messages;
 using System;
 
-namespace IMDb.Domain.Commands
+namespace IMDb.Domain.Commands.Movie
 {
     public class AddMeanCommand : Command
     {
