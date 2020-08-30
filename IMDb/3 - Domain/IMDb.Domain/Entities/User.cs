@@ -18,6 +18,11 @@ namespace IMDb.Domain.Entities
             RatingOfMovies = new List<RatingOfMovie>();
         }
 
+        public void ChangeName(string name)
+        {
+            Name = name;
+        }
+
         public User(Guid id, string name, bool status, string password, Guid roleId)
         {
             Id = id;

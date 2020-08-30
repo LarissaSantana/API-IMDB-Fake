@@ -1,4 +1,5 @@
 ﻿using IMDb.Application.Interfaces;
+using IMDb.Application.ViewModels;
 using IMDb.Application.ViewModels.Add;
 using IMDb.Domain.Core.Notifications;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,17 @@ namespace IMDb.API.Controllers
                 return BadRequest(errors);
 
             _userAppService.AddUser(viewModel);
+            return GetResponse();
+        }
+
+        [HttpPut]
+        public IActionResult UpdateUser([FromBody] UpdateUserViewModel viewModel)
+        {
+            var errors = GetErrorListFromModelState();
+            if (errors.Any())
+                return BadRequest(errors);
+
+            _userAppService.UpdateUser(viewModel);
             return GetResponse();
         }
     }

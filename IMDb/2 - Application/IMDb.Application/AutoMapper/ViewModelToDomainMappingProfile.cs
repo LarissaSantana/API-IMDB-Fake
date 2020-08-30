@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IMDb.Application.ViewModels;
 using IMDb.Application.ViewModels.Add;
 using IMDb.Domain.Commands.Movie;
 using IMDb.Domain.Commands.User;
@@ -27,6 +28,9 @@ namespace IMDb.Application.AutoMapper
             //User
             CreateMap<AddUserViewModel, AddUserCommand>()
               .ConstructUsing(c => new AddUserCommand(c.Name, c.Password, c.RoleId, c.Status));
+
+            CreateMap<UpdateUserViewModel, UpdateUserCommand>()
+              .ConstructUsing(c => new UpdateUserCommand(c.Name, c.Password, c.Id.Value));
         }
     }
 }

@@ -55,7 +55,6 @@ namespace IMDb.Data.Repositories
             int pageNumber,
             int pageSize)
         {
-
             IQueryable<Movie> query;
 
             query = _context.Set<Movie>()

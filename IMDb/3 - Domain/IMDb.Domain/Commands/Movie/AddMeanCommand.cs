@@ -5,7 +5,7 @@ namespace IMDb.Domain.Commands.Movie
 {
     public class AddMeanCommand : Command
     {
-        public Guid MovieId { get; set; }
+        public Guid MovieId { get; private set; }
 
         public AddMeanCommand(Guid movieId)
         {
