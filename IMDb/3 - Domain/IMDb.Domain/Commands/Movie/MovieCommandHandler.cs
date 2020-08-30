@@ -10,7 +10,6 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using static IMDb.Domain.Entities.Cast;
@@ -69,14 +68,13 @@ namespace IMDb.Domain.Commands.Movie
             if (castsNotFound.Any())
                 castsNotFound.ToList().ForEach(x => NotifyValidationErrors($"Cast not found. Id: {x}"));
 
-            //TODO: traduzir!
             if (casts.Any())
             {
                 if (!casts.Any(x => x.CastType == CastType.Director))
-                    NotifyValidationErrors("O Filme deve ter pelo menos um Diretor!");
+                    NotifyValidationErrors("The movie must have at least one director!");
 
                 if (message.Genre != Genre.Animation && !casts.Any(x => x.CastType == CastType.Actor))
-                    NotifyValidationErrors("O Filme deve ter pelo menos um Ator!");
+                    NotifyValidationErrors("c");
             }
         }
 

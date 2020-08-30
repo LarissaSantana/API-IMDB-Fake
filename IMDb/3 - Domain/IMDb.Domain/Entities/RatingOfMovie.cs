@@ -23,10 +23,9 @@ namespace IMDb.Domain.Entities
 
         public override bool IsValid()
         {
-            //TODO: TRADUZIR
             RuleFor(movieRating => movieRating.Rate)
                 .InclusiveBetween(0, 4)
-                .WithMessage("o campo \"Rate\" deve estar entre 0 e 4!");
+                .WithMessage("The \"Rate\" field must be between 0 and 4!");
 
             ValidationResult = Validate(this);
             return ValidationResult.IsValid;

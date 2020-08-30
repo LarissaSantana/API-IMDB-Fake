@@ -7,11 +7,10 @@ namespace IMDb.Application.ViewModels.Movie.Add
 {
     public class AddMovieViewModel
     {
-        //TODO: traduzir mensagens de erro
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [Required(ErrorMessage = "The {0} is required")]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [Required(ErrorMessage = "The {0} is required")]
         public Genre Genre { get; set; }
 
         public List<Guid> CastIds { get; set; }
