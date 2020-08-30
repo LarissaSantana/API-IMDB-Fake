@@ -1,6 +1,8 @@
 ﻿using IMDb.Application.Interfaces;
+using IMDb.Application.ViewModels.Add;
 using IMDb.Domain.Core.Notifications;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace IMDb.API.Controllers
 {
@@ -14,6 +16,17 @@ namespace IMDb.API.Controllers
              IDomainNotificationHandler<DomainNotification> notifications) : base(notifications)
         {
             _userAppService = userAppService;
+        }
+
+        [HttpPost]
+        public IActionResult AddUser([FromBody] AddUserViewModel viewModel)
+        {
+            var errors = GetErrorListFromModelState();
+            if (errors.Any())
+                return BadRequest(errors);
+
+            _userAppService.AddUser(viewModel);
+            return GetResponse();
         }
     }
 }

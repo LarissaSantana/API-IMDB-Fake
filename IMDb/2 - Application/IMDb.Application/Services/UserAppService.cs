@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IMDb.Application.Interfaces;
 using IMDb.Application.ViewModels.Add;
+using IMDb.Domain.Commands.User;
 using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Repositories;
 
@@ -21,7 +22,8 @@ namespace IMDb.Application.Services
 
         public void AddUser(AddUserViewModel viewModel)
         {
-            throw new System.NotImplementedException();
+            var map = _mapper.Map<AddUserCommand>(viewModel);
+            _bus.SendCommand(map);
         }
     }
 }

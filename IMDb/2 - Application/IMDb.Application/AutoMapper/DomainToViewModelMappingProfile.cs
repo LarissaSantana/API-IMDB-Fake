@@ -9,7 +9,6 @@ namespace IMDb.Application.AutoMapper
     {
         public DomainToViewModelMappingProfile()
         {
-
             CreateMap<Movie, MovieViewModel>()
                 .ForMember(dest => dest.CastOfMovie, opt => opt.MapFrom(src => src.CastOfMovies));
 
@@ -27,6 +26,10 @@ namespace IMDb.Application.AutoMapper
 
             CreateMap<Pagination<Movie>, Pagination<MovieWithRatingViewModel>>()
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
+
+            //TODO: criar uma classe partial
+            //User
+
         }
     }
 }
