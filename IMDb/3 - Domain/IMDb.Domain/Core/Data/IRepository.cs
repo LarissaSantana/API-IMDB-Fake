@@ -13,5 +13,6 @@ namespace IMDb.Domain.Core.Data
         IEnumerable<TEntity> GetByFilters(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] include);
         IEnumerable<TEntity> GetAll();
         void Delete(Guid id);
+        Guid? GetUserAuthenticatedId();
     }
 }

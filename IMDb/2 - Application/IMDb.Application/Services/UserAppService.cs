@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IMDb.Application.Interfaces;
 using IMDb.Application.ViewModels.User;
+using IMDb.Data.CrossCutting.Authorization;
 using IMDb.Domain.Commands.User;
 using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Entities;
@@ -17,6 +18,7 @@ namespace IMDb.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IMediatorHandler _bus;
+        private readonly AuthenticatedUser _user;
 
         public UserAppService(IUserRepository userRepository, IMapper mapper, IMediatorHandler bus)
         {

@@ -2,6 +2,7 @@
 using IMDb.Application.Services;
 using IMDb.Application.Services.Interfaces;
 using IMDb.Data.Core;
+using IMDb.Data.CrossCutting.Authorization;
 using IMDb.Data.Repositories;
 using IMDb.Domain.Commands.Movie;
 using IMDb.Domain.Commands.User;
@@ -11,6 +12,7 @@ using IMDb.Domain.Core.Notifications;
 using IMDb.Domain.Events;
 using IMDb.Domain.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IMDb.API
@@ -39,6 +41,9 @@ namespace IMDb.API
             services.AddScoped<IRequestHandler<ChangeStatusCommand, bool>, UserCommandHandler>();
 
             services.AddScoped<INotificationHandler<RatingOfMovieAddedEvent>, MovieEventHandler>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<AuthenticatedUser>();
         }
     }
 }

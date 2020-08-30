@@ -34,13 +34,6 @@ namespace IMDb.API.Controllers
             return GetResponse();
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult teste()
-        {
-
-        }
-
         [HttpPost]
         [Route("cast")]
         [Authorize(Roles = "e33a5da4-4c46-4f0e-8ef7-8d01a12f9884")]
@@ -84,6 +77,6 @@ namespace IMDb.API.Controllers
             var movies = _movieAppService.GetMovies(viewModel, pageNumber, pageSize);
 
             return GetResponse(movies);
-        }      
+        }
     }
 }

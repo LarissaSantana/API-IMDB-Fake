@@ -1,4 +1,5 @@
 ﻿using IMDb.Data.Context;
+using IMDb.Data.CrossCutting.Authorization;
 using IMDb.Domain.Core.Data;
 using IMDb.Domain.DomainObjects;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,13 @@ namespace IMDb.Data.Core
     {
         private readonly IMDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
+        private readonly AuthenticatedUser _user;
 
-        public BaseRepository(IMDbContext context)
+        public BaseRepository(IMDbContext context, AuthenticatedUser user)
         {
             _context = context;
             _dbSet = context.Set<TEntity>();
+            _user = user;
         }
 
         public void Add(TEntity entity)
@@ -82,6 +85,11 @@ namespace IMDb.Data.Core
         protected void Update<T>(T entity) where T : BaseEntity<T>
         {
             _context.Update(entity);
+        }
+
+        public Guid? GetUserAuthenticatedId()
+        {
+            return _user?.Id;
         }
 
         public void Dispose()

@@ -1,5 +1,6 @@
 ﻿using IMDb.Data.Context;
 using IMDb.Data.Core;
+using IMDb.Data.CrossCutting.Authorization;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using IMDb.Domain.Utility;
@@ -14,7 +15,7 @@ namespace IMDb.Data.Repositories
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
         private readonly IMDbContext _context;
-        public UserRepository(IMDbContext context) : base(context)
+        public UserRepository(IMDbContext context, AuthenticatedUser user) : base(context, user)
         {
             _context = context;
         }
