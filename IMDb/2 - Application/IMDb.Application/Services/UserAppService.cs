@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using IMDb.Application.Interfaces;
-using IMDb.Application.ViewModels.Movie.Add;
 using IMDb.Application.ViewModels.User;
 using IMDb.Domain.Commands.User;
 using IMDb.Domain.Core.Bus;
@@ -44,7 +43,7 @@ namespace IMDb.Application.Services
             _bus.SendCommand(map);
         }
 
-        public Pagination<UserViewModel> GetNonActiveteCommonUsers(int pageNumber, int pageSize)
+        public Pagination<UserViewModel> GetNonActiveCommonUsers(int pageNumber, int pageSize)
         {
             Expression<Func<User, bool>> predicate = ExpressionExtension.Query<User>();
             predicate = predicate.And(user => user.RoleId == RoleIdentify.Common.Value)
@@ -56,6 +55,7 @@ namespace IMDb.Application.Services
 
         public User GetUsersByNameAndPassword(string name, string password)
         {
+            //TODO: buscar senha criptografada
             var user = _userRepository.GetByFilters(user => user.Name.ToLower().Equals(name.ToLower()) &&
                                                             user.Password.ToLower().Equals(password.ToLower()));
 

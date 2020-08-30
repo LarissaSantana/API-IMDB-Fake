@@ -11,7 +11,7 @@ namespace IMDb.Application.Interfaces
         void AddUser(AddUserViewModel viewModel);
         void UpdateUser(UpdateUserViewModel viewModel);
         void ChangeStatus(Guid userId, bool status);
-        Pagination<UserViewModel> GetNonActiveteCommonUsers(int pageNumber, int pageSize);
+        Pagination<UserViewModel> GetNonActiveCommonUsers(int pageNumber, int pageSize);
 
         User GetUsersByNameAndPassword(string name, string password);
     }
