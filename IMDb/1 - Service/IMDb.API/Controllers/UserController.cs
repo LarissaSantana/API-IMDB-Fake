@@ -5,6 +5,7 @@ using IMDb.Domain.Core.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IMDb.API.Controllers
 {
@@ -18,6 +19,21 @@ namespace IMDb.API.Controllers
              IDomainNotificationHandler<DomainNotification> notifications) : base(notifications)
         {
             _userAppService = userAppService;
+        }
+
+
+        //TODO: refatorar viewmodel
+        [HttpPost]
+        [Route("login")]
+        public IActionResult Authenticate([FromBody] AddUserViewModel viewModel)
+        {
+            var user = _userAppService.GetUsersByNameAndPassword(viewModel.Name, viewModel.Password);
+
+            if (user == null)
+                return NotFound(new { message = "Invalid username or password." });
+
+            var token = TokenService.GenerateToken(user);
+            return GetResponse(token);
         }
 
         [HttpPost]

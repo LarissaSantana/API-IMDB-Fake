@@ -9,6 +9,7 @@ using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using IMDb.Domain.Utility;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace IMDb.Application.Services
@@ -46,12 +47,20 @@ namespace IMDb.Application.Services
 
         public Pagination<UserViewModel> GetNonActiveteCommonUsers(int pageNumber, int pageSize)
         {
-            Expression<Func<User, bool>> predicate = ExpressionExtension.Query<User>();            
+            Expression<Func<User, bool>> predicate = ExpressionExtension.Query<User>();
             predicate = predicate.And(user => user.RoleId == RoleIdentify.Common.Value)
                                  .And(user => user.Status);
 
             var usersPagination = _userRepository.GetUsersWithPagination(predicate, pageNumber, pageSize);
             return _mapper.Map<Pagination<User>, Pagination<UserViewModel>>(usersPagination);
+        }
+
+        public User GetUsersByNameAndPassword(string name, string password)
+        {
+            var user = _userRepository.GetByFilters(user => user.Name.ToLower().Equals(name.ToLower()) &&
+                                                            user.Password.ToLower().Equals(password.ToLower()));
+
+            return user?.FirstOrDefault();
         }
     }
 }
