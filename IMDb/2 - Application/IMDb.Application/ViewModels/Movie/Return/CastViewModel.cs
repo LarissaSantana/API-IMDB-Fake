@@ -1,7 +1,7 @@
 ﻿using IMDb.Domain.Enums;
 using System;
 
-namespace IMDb.Application.ViewModels.Return
+namespace IMDb.Application.ViewModels.Movie.Return
 {
     public class CastViewModel
     {

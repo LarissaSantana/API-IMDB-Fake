@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace IMDb.Application.ViewModels
+namespace IMDb.Application.ViewModels.User
 {
     public class UpdateUserViewModel
     {

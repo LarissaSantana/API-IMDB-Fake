@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using IMDb.Application.ViewModels;
-using IMDb.Application.ViewModels.Add;
+using IMDb.Application.ViewModels.Movie.Add;
+using IMDb.Application.ViewModels.User;
 using IMDb.Domain.Commands.Movie;
 using IMDb.Domain.Commands.User;
 using IMDb.Domain.Entities;

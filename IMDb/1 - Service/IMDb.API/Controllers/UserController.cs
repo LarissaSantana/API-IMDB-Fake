@@ -1,11 +1,9 @@
 ﻿using IMDb.Application.Interfaces;
-using IMDb.Application.ViewModels;
-using IMDb.Application.ViewModels.Add;
+using IMDb.Application.ViewModels.User;
 using IMDb.Domain.Core.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace IMDb.API.Controllers
 {
@@ -25,7 +23,7 @@ namespace IMDb.API.Controllers
         //TODO: refatorar viewmodel
         [HttpPost]
         [Route("login")]
-        public IActionResult Authenticate([FromBody] AddUserViewModel viewModel)
+        public IActionResult Authenticate([FromBody] UserLoginViewModel viewModel)
         {
             var user = _userAppService.GetUsersByNameAndPassword(viewModel.Name, viewModel.Password);
 

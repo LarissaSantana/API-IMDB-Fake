@@ -1,6 +1,6 @@
 ﻿using IMDb.Domain.Enums;
 
-namespace IMDb.Application.ViewModels.Add
+namespace IMDb.Application.ViewModels.Movie.Add
 {
     public class AddCastViewModel
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IMDb.Application.ViewModels.Return
+namespace IMDb.Application.ViewModels.User
 {
     public class RoleViewModel
     {

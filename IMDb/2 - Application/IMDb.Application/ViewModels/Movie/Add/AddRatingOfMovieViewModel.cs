@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace IMDb.Application.ViewModels.Add
+namespace IMDb.Application.ViewModels.Movie.Add
 {
     public class AddRatingOfMovieViewModel
     {

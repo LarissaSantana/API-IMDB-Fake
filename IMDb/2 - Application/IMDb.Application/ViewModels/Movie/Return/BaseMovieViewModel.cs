@@ -1,9 +1,8 @@
-﻿using IMDb.Application.ViewModels.Return;
-using IMDb.Domain.Enums;
+﻿using IMDb.Domain.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace IMDb.Application.ViewModels
+namespace IMDb.Application.ViewModels.Movie.Return
 {
     public abstract class BaseMovieViewModel
     {

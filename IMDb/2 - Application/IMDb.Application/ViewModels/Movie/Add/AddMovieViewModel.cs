@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace IMDb.Application.ViewModels.Add
+namespace IMDb.Application.ViewModels.Movie.Add
 {
     public class AddMovieViewModel
     {

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IMDb.Application.ViewModels.Filters
+namespace IMDb.Application.ViewModels.Movie
 {
     public class MovieFilterViewModel
     {

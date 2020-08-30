@@ -1,6 +1,6 @@
 ﻿using IMDb.Application.Services.Interfaces;
-using IMDb.Application.ViewModels.Add;
-using IMDb.Application.ViewModels.Filters;
+using IMDb.Application.ViewModels.Movie;
+using IMDb.Application.ViewModels.Movie.Add;
 using IMDb.Domain.Core.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System;

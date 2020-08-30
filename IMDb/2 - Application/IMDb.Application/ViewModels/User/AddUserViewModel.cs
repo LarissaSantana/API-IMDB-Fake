@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IMDb.Application.ViewModels.Add
+namespace IMDb.Application.ViewModels.User
 {
     public class AddUserViewModel
     {

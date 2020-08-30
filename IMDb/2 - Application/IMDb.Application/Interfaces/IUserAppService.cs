@@ -1,6 +1,5 @@
-﻿using IMDb.Application.ViewModels;
-using IMDb.Application.ViewModels.Add;
-using IMDb.Application.ViewModels.Return;
+﻿using IMDb.Application.ViewModels.Movie.Add;
+using IMDb.Application.ViewModels.User;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Utility;
 using System;
