@@ -4,23 +4,20 @@ using IMDb.Application.ViewModels.Filters;
 using IMDb.Domain.Core.Notifications;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace IMDb.API.Controllers
 {
     //TODO: fazer versionamento
     [Route("api/movie")]
-    public class MovieController : ControllerBase
+    public class MovieController : BaseController
     {
         private readonly IMovieAppService _movieAppService;
-        private readonly IDomainNotificationHandler<DomainNotification> _notifications;
 
         public MovieController(IMovieAppService movieAppService,
-            IDomainNotificationHandler<DomainNotification> notifications)
+             IDomainNotificationHandler<DomainNotification> notifications) : base(notifications)
         {
             _movieAppService = movieAppService;
-            _notifications = notifications;
         }
 
         [HttpPost]
@@ -73,35 +70,6 @@ namespace IMDb.API.Controllers
             var movies = _movieAppService.GetMoviesWithPagination(viewModel, pageNumber, pageSize);
 
             return GetResponse(movies);
-        }
-
-        //TODO: criar uma classe base
-        private List<string> GetErrorListFromModelState()
-        {
-            var errors = new List<string>();
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                var errorMsg = error.Exception == null ? error.ErrorMessage : error.Exception.Message;
-                errors.Add(errorMsg);
-            }
-            return errors;
-        }
-
-        private IActionResult GetResponse()
-        {
-            return GetResponse(null);
-        }
-
-        private IActionResult GetResponse(object result)
-        {
-            if (_notifications.HasNotifications())
-            {
-                return BadRequest(_notifications.GetNotifications().Select(n => n.Value));
-            }
-
-            if (result == null) return Ok();
-
-            return Ok(result);
-        }
+        }      
     }
 }
