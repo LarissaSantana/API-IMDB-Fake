@@ -17,19 +17,37 @@ namespace IMDb.Domain.Entities
         {
             RatingOfMovies = new List<RatingOfMovie>();
         }
-    
-        public User(Guid id, string name, bool status, string password)
+
+        public User(Guid id, string name, bool status, string password, Guid roleId)
         {
             Id = id;
             Name = name;
             Status = status;
             Password = password;
+            RoleId = roleId;
         }
 
         public override bool IsValid()
         {
             ValidationResult = Validate(this);
             return ValidationResult.IsValid;
+        }
+    }
+
+    public static class UserFactory
+    {
+        public static User Create(string name, Guid roleId, string password, Guid? id = null, bool status = true)
+        {
+            var user = new User
+                (
+                    id: id ?? Guid.NewGuid(),
+                    name: name,
+                    password: password,
+                    status: status,
+                    roleId: roleId
+                );
+
+            return user;
         }
     }
 }

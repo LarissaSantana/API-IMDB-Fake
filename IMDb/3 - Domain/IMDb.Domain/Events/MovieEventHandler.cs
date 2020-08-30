@@ -1,4 +1,4 @@
-﻿using IMDb.Domain.Commands;
+﻿using IMDb.Domain.Commands.Movie;
 using IMDb.Domain.Core.Bus;
 using MediatR;
 using System.Threading;

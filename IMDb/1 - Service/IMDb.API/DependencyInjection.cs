@@ -4,6 +4,7 @@ using IMDb.Application.Services.Interfaces;
 using IMDb.Data.Core;
 using IMDb.Data.Repositories;
 using IMDb.Domain.Commands.Movie;
+using IMDb.Domain.Commands.User;
 using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Core.Data;
 using IMDb.Domain.Core.Notifications;
@@ -33,6 +34,7 @@ namespace IMDb.API
             services.AddScoped<IRequestHandler<AddRatingOfMovieCommand, bool>, MovieCommandHandler>();
             services.AddScoped<IRequestHandler<AddMeanCommand, bool>, MovieCommandHandler>();
             services.AddScoped<IRequestHandler<AddCastCommand, bool>, MovieCommandHandler>();
+            services.AddScoped<IRequestHandler<AddUserCommand, bool>, UserCommandHandler>();
 
             services.AddScoped<INotificationHandler<RatingOfMovieAddedEvent>, MovieEventHandler>();
         }
