@@ -60,5 +60,14 @@ namespace IMDb.API.Controllers
             _userAppService.ChangeStatus(id, true);
             return GetResponse();
         }
+
+        //TODO: authorize administrador
+        [HttpGet]
+        [Route("getNonActiveteCommonUsers")]
+        public IActionResult GetNonActiveteUsers(int pageNumber = 1, int pageSize = 10)
+        {
+            var usersPagination = _userAppService.GetNonActiveteCommonUsers(pageNumber, pageSize);
+            return GetResponse(usersPagination);
+        }
     }
 }

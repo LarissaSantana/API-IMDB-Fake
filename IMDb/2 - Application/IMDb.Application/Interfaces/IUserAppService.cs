@@ -1,5 +1,7 @@
 ﻿using IMDb.Application.ViewModels;
 using IMDb.Application.ViewModels.Add;
+using IMDb.Application.ViewModels.Return;
+using IMDb.Domain.Utility;
 using System;
 
 namespace IMDb.Application.Interfaces
@@ -9,5 +11,6 @@ namespace IMDb.Application.Interfaces
         void AddUser(AddUserViewModel viewModel);
         void UpdateUser(UpdateUserViewModel viewModel);
         void ChangeStatus(Guid userId, bool status);
+        Pagination<UserViewModel> GetNonActiveteCommonUsers(int pageNumber, int pageSize);
     }
 }

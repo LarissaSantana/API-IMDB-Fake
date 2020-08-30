@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using IMDb.Application.ViewModels.Return;
-using IMDb.Domain.Core.Pagination;
 using IMDb.Domain.Entities;
+using IMDb.Domain.Utility;
 
 namespace IMDb.Application.AutoMapper
 {
@@ -29,7 +29,18 @@ namespace IMDb.Application.AutoMapper
 
             //TODO: criar uma classe partial
             //User
+            CreateMap<Role, RoleViewModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
 
+            CreateMap<User, UserViewModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.RoleId));
+
+            CreateMap<Pagination<User>, Pagination<UserViewModel>>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
         }
     }
 }
