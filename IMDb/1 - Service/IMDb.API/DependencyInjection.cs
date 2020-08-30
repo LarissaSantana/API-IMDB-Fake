@@ -1,4 +1,6 @@
-﻿using IMDb.Application.Services;
+﻿using IMDb.Application.Interfaces;
+using IMDb.Application.Services;
+using IMDb.Application.Services.Interfaces;
 using IMDb.Data.Core;
 using IMDb.Data.Repositories;
 using IMDb.Domain.Commands.Movie;
@@ -25,6 +27,7 @@ namespace IMDb.API
             services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IMovieAppService, MovieAppService>();
+            services.AddScoped<IUserAppService, UserAppService>();
 
             services.AddScoped<IRequestHandler<AddMovieCommand, bool>, MovieCommandHandler>();
             services.AddScoped<IRequestHandler<AddRatingOfMovieCommand, bool>, MovieCommandHandler>();

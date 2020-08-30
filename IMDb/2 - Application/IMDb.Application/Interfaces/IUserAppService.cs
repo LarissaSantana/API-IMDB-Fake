@@ -1,4 +1,6 @@
-﻿namespace IMDb.Application.Interfaces
+﻿using IMDb.Application.ViewModels.Add;
+
+namespace IMDb.Application.Interfaces
 {
     public interface IUserAppService
     {
