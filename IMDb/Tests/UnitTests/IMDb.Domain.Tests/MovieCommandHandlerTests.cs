@@ -1,8 +1,10 @@
 ﻿using IMDb.Domain.Commands.Movie;
+using IMDb.Domain.Core.Notifications;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Enums;
 using IMDb.Domain.Repositories;
 using IMDb.Domain.Tests.Fakes;
+using MediatR;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -57,6 +59,10 @@ namespace IMDb.Domain.Tests
                 movie.Genre == addMovieCommand.Genre &&
                 addMovieCommand.CastIds.All(x => movie.CastOfMovies.Select(x => x.CastId).Contains(x)))),
                 Times.Once);
+
+            _fixture.Mocker.GetMock<INotificationHandler<DomainNotification>>()
+                .Verify(x => x.Handle(It.IsAny<DomainNotification>(), It.IsAny<CancellationToken>()),
+                Times.Never);
 
             Assert.True(result.Result);
         }
