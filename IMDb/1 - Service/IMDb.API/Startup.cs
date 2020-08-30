@@ -61,6 +61,8 @@ namespace IMDb.API
                     ValidateAudience = false
                 };
             });
+
+            //TODO: swagger
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -44,6 +44,12 @@ namespace IMDb.Domain.Commands.User
 
         public async Task<bool> Handle(UpdateUserCommand message, CancellationToken cancellationToken)
         {
+            if (!message.Id.Equals(_userRepository.GetUserAuthenticatedId()))
+            {
+                NotifyValidationErrors("Permission denied to change this user.");
+                return false;
+            }
+
             var user = _userRepository.GetById(message.Id);
             if (user == null)
             {
@@ -62,6 +68,12 @@ namespace IMDb.Domain.Commands.User
 
         public async Task<bool> Handle(ChangeStatusCommand message, CancellationToken cancellationToken)
         {
+            if (!message.Id.Equals(_userRepository.GetUserAuthenticatedId()))
+            {
+                NotifyValidationErrors("Permission denied to change this user.");
+                return false;
+            }
+
             var user = _userRepository.GetById(message.Id);
             if (user == null)
             {

@@ -21,6 +21,7 @@ namespace IMDb.API.Controllers
             _userAppService = userAppService;
         }
 
+        //TODO: Criar uma controller
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
@@ -47,8 +48,7 @@ namespace IMDb.API.Controllers
             _userAppService.AddUser(viewModel);
             return GetResponse();
         }
-
-        //TODO: validar usuário logado.
+        
         [HttpPut]
         public IActionResult UpdateUser([FromBody] UpdateUserViewModel viewModel)
         {
@@ -60,7 +60,6 @@ namespace IMDb.API.Controllers
             return GetResponse();
         }
 
-        //TODO: validar usuário logado.
         [HttpPut]
         [Route("deactivate")]
         public IActionResult DeactivateUser(Guid id)
@@ -69,7 +68,6 @@ namespace IMDb.API.Controllers
             return GetResponse();
         }
 
-        //TODO: validar usuário logado.
         [HttpPut]
         [Route("activate")]
         public IActionResult ActivateUser(Guid id)
