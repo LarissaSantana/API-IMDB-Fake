@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace IMDb.Domain.Tests
@@ -229,9 +228,6 @@ namespace IMDb.Domain.Tests
 
             Assert.True(result.Result);
         }
-
-        //TODO: TESTE ADD MOVIE - CASO RETORNE ERRO DE VALIDAÇÃO DO DOMÍNIO PARA CASTOFMOVIE
-        //TODO: TESTE ADD MOVIE - CASO RETORNE ERRO DE VALIDAÇÃO DO DOMÍNIO PARA MOVIE
 
         //TODO: TESTE ADD CAST - COM SUCESSO
         //TODO: TESTE ADD CAST - CASO RETORNE VALIDAÇÃO DE ERRO DO DOMÍNIO

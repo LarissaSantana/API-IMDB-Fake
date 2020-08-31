@@ -46,14 +46,20 @@ namespace IMDb.Domain.Commands.Movie
             {
                 var castOfMovieModel = CastOfMovieFactory.Create(movie.Id, castId);
                 if (!castOfMovieModel.IsValid())
+                {
                     NotifyValidationErrors(castOfMovieModel.ValidationResult);
+                    return false;
+                }
 
                 castOfMovieList.Add(castOfMovieModel);
             }
 
             movie.AddCastOfMovie(castOfMovieList);
             if (!movie.IsValid())
+            {
                 NotifyValidationErrors(movie.ValidationResult);
+                return false;
+            }
 
             _movieRepository.Add(movie);
 
