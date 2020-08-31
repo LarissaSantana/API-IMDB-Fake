@@ -24,7 +24,6 @@ namespace IMDb.Application.AutoMapper
             CreateMap<AddRatingOfMovieViewModel, AddRatingOfMovieCommand>()
                 .ConstructUsing(m => new AddRatingOfMovieCommand(m.Rate, m.MovieId));
 
-            //TODO: criar uma classe partial
             //User
             CreateMap<AddUserViewModel, AddUserCommand>()
               .ConstructUsing(c => new AddUserCommand(c.Name, c.Password, c.RoleId, c.Status));

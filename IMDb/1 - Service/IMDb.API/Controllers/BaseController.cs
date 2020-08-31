@@ -31,7 +31,7 @@ namespace IMDb.API.Controllers
 
         protected IActionResult GetResponse(object result)
         {
-            if (_notifications.HasNotifications())
+            if (_notifications != null && _notifications.HasNotifications())
             {
                 return BadRequest(_notifications.GetNotifications().Select(n => n.Value));
             }

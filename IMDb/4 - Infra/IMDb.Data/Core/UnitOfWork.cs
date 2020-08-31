@@ -15,18 +15,7 @@ namespace IMDb.Data.Core
 
         public bool Commit()
         {
-            //TODO: remover o try/catch
-            try
-            {
-                var teste = _context.SaveChanges() > 0;
-                return true;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.InnerException.Message);
-            }
-
-            //return _context.SaveChanges() > 0;
+            return _context.SaveChanges() > 0;
         }
 
         public void Dispose()

@@ -28,7 +28,6 @@ namespace IMDb.Application.AutoMapper
             CreateMap<Pagination<Movie>, Pagination<MovieWithRatingViewModel>>()
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
 
-            //TODO: criar uma classe partial
             //User
             CreateMap<Role, RoleViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

@@ -21,22 +21,6 @@ namespace IMDb.API.Controllers
             _userAppService = userAppService;
         }
 
-        //TODO: Criar uma controller
-        [HttpPost]
-        [Route("login")]
-        [AllowAnonymous]
-        public IActionResult Authenticate([FromBody] UserLoginViewModel viewModel)
-        {
-            var user = _userAppService.GetUsersByNameAndPassword(viewModel.Name, viewModel.Password);
-
-            if (user == null)
-                return NotFound(new { message = "Invalid username or password." });
-
-            var token = TokenService.GenerateToken(user);
-
-            return GetResponse(new { token = token });
-        }
-
         [HttpPost]
         [AllowAnonymous]
         public IActionResult AddUser([FromBody] AddUserViewModel viewModel)

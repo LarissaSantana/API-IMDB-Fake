@@ -32,6 +32,7 @@ namespace IMDb.API
 
             services.AddScoped<IMovieAppService, MovieAppService>();
             services.AddScoped<IUserAppService, UserAppService>();
+            services.AddScoped<IAuthenticationAppService, AuthenticationAppService>();
 
             services.AddScoped<IRequestHandler<AddMovieCommand, bool>, MovieCommandHandler>();
             services.AddScoped<IRequestHandler<AddRatingOfMovieCommand, bool>, MovieCommandHandler>();
