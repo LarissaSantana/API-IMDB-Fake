@@ -77,8 +77,8 @@ namespace IMDb.Domain.Tests
         public void AddMovieCommand_WhenCastDoesNotExists_ShouldReturnErrorMessage()
         {
             //Arrange
-            var actor1 = EntitiesFake.GenerateCastFake(id: Guid.NewGuid());
-            var actor2 = EntitiesFake.GenerateCastFake(id: Guid.NewGuid());
+            var actor1 = EntitiesFake.GenerateCastFake(id: Guid.NewGuid(), type: CastType.Actor);
+            var actor2 = EntitiesFake.GenerateCastFake(id: Guid.NewGuid(), type: CastType.Actor);
             var director = EntitiesFake.GenerateCastFake(id: Guid.NewGuid());
             var casts = new List<Cast>() { actor1, director };
             _fixture.GetCastSetup(casts);
@@ -89,9 +89,10 @@ namespace IMDb.Domain.Tests
                 genre: Genre.SciFi,
                 castIds: castIds);
 
+            _fixture.HasNotificationsSetup(true);
+
             //Act
             var result = _commandHandler.Handle(addMovieCommand, CancellationToken.None);
-            _fixture.HasNotificationsSetup(true);
 
             //Assert            
             var errorMessage = $"Cast not found. Id: {actor2.Id}";
@@ -110,6 +111,43 @@ namespace IMDb.Domain.Tests
         }
 
         //TODO: TESTE ADD MOVIE - NA LISTA DE CAST DEVE HAVER PELO MENOS UM DIRETOR
+        [Fact(DisplayName = "Should fail when adds movie given that a director is required")]
+        [Trait("Movie", "MovieCommandHandler Tests")]
+        public void AddMovieCommand_WhenDirectorDoesNotExist_ShouldReturnErrorMessage()
+        {
+            //Arrange
+            var actor1 = EntitiesFake.GenerateCastFake(id: Guid.NewGuid(), type: CastType.Actor);
+            var actor2 = EntitiesFake.GenerateCastFake(id: Guid.NewGuid(), type: CastType.Actor);
+            var casts = new List<Cast>() { actor1, actor2 };
+            _fixture.GetCastSetup(casts);
+
+            var castIds = new List<Guid>() { actor1.Id, actor2.Id };
+            var addMovieCommand = CommandsFake.GenerateAddMovieCommandFake(
+                title: "Arrival",
+                genre: Genre.SciFi,
+                castIds: castIds);
+
+            _fixture.HasNotificationsSetup(true);
+
+            //Act
+            var result = _commandHandler.Handle(addMovieCommand, CancellationToken.None);
+
+            //Assert            
+            var errorMessage = $"The movie must have at least one director!";
+            _fixture.Mocker.GetMock<IDomainNotificationHandler<DomainNotification>>().Verify(x => x.Handle(
+                    It.Is<DomainNotification>(x => x.Value.Equals(errorMessage)),
+                    It.IsAny<CancellationToken>()), Times.Once);
+
+            _fixture.Mocker.GetMock<IMovieRepository>()
+                .Verify(x => x.GetCast(It.IsAny<Expression<Func<Cast, bool>>>()), Times.Once);
+
+            _fixture.Mocker.GetMock<IMovieRepository>().Verify(x => x.Add(It.IsAny<Movie>()), Times.Never);
+
+            _fixture.Mocker.GetMock<IUnitOfWork>().Verify(x => x.Commit(), Times.Never);
+
+            Assert.False(result.Result);
+        }
+
         //TODO: TESTE ADD MOVIE - INLINE_DATA PARA VALIDAR QUE TEM PELO MENOS UM ATOR QUANDO O GENERO NÃO É ANIMATION
         //TODO: TESTE ADD MOVIE - CASO RETORNE ERRO DE VALIDAÇÃO DO DOMÍNIO PARA CASTOFMOVIE
         //TODO: TESTE ADD MOVIE - CASO RETORNE ERRO DE VALIDAÇÃO DO DOMÍNIO PARA MOVIE
