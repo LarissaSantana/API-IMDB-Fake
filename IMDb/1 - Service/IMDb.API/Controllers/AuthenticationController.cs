@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IMDb.API.Controllers
 {
-    [Route("api/auth")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}")]
     public class AuthenticationController : BaseController
     {
         private readonly IAuthenticationAppService _authenticationAppService;

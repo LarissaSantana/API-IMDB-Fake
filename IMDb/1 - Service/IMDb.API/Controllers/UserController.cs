@@ -8,9 +8,10 @@ using System.Linq;
 
 namespace IMDb.API.Controllers
 {
-    //TODO: versionamento
     [Authorize]
-    [Route("api/user")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiController]
     public class UserController : BaseController
     {
         private readonly IUserAppService _userAppService;
@@ -32,7 +33,7 @@ namespace IMDb.API.Controllers
             _userAppService.AddUser(viewModel);
             return GetResponse();
         }
-        
+
         [HttpPut]
         public IActionResult UpdateUser([FromBody] UpdateUserViewModel viewModel)
         {

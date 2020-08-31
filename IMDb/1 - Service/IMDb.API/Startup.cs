@@ -5,6 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,6 +44,7 @@ namespace IMDb.API
             services.AddMediatR(typeof(Startup));
 
             services.AddControllers();
+
             services.RegisterServices();
 
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
@@ -63,29 +66,53 @@ namespace IMDb.API
                 };
             });
 
+            services.AddApiVersioning(opt =>
+            {
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ReportApiVersions = true;
+            });
+
+            services.AddVersionedApiExplorer(opt =>
+            {
+                opt.GroupNameFormat = "'v'VVV";
+                opt.SubstituteApiVersionInUrl = true;
+            });
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "IMDb API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "API V1 Title",
+                    Description = "API V1 Description"
+                });
+
+                //c.SwaggerDoc("v2", new OpenApiInfo
+                //{
+                //    Version = "v2",
+                //    Title = "API V2 Title",
+                //    Description = "API V2 Description"
+                //});
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.UseSwaggerUI(opt =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "IMDb API v1");
+                opt.SwaggerEndpoint($"/swagger/v1/swagger.json", "API V1");
+                //opt.SwaggerEndpoint($"/swagger/v2/swagger.json", "API V2");
             });
 
+            app.UseHttpsRedirection();
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 

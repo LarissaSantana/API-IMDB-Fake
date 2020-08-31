@@ -8,10 +8,11 @@ using System;
 using System.Linq;
 
 namespace IMDb.API.Controllers
-{
-    //TODO: fazer versionamento
+{     
     [Authorize]
-    [Route("api/movie")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiController]
     public class MovieController : BaseController
     {
         private readonly IMovieAppService _movieAppService;
