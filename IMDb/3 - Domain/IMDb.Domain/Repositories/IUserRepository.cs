@@ -10,6 +10,7 @@ namespace IMDb.Domain.Repositories
     public interface IUserRepository : IRepository<User>
     {
        IEnumerable<Role> GetRole(Expression<Func<Role, bool>> predicate);
-       Pagination<User> GetUsersWithPagination(Expression<Func<User, bool>> predicate, int pageNumber, int pageSize);
+        Pagination<User> GetUsersWithPagination(Expression<Func<User, bool>> predicate, int pageNumber, int pageSize);
+        bool ValidatePassword(string name, string plainTextPassword);
     }
 }

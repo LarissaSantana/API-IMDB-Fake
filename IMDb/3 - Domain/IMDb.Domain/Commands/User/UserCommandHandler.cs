@@ -2,6 +2,7 @@
 using IMDb.Domain.Core.Data;
 using IMDb.Domain.Core.Messages;
 using IMDb.Domain.Core.Notifications;
+using IMDb.Domain.Core.Security;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using MediatR;
@@ -17,11 +18,17 @@ namespace IMDb.Domain.Commands.User
         IRequestHandler<ChangeStatusCommand, bool>
     {
         private readonly IUserRepository _userRepository;
-        public UserCommandHandler(IUserRepository userRepository, IUnitOfWork uow, IMediatorHandler bus,
-           IDomainNotificationHandler<DomainNotification> notifications)
+        private readonly ISecurity _security;
+        public UserCommandHandler(
+            IUserRepository userRepository,
+            IUnitOfWork uow,
+            IMediatorHandler bus,
+            IDomainNotificationHandler<DomainNotification> notifications,
+            ISecurity security)
            : base(bus, uow, notifications)
         {
             _userRepository = userRepository;
+            _security = security;
         }
 
         public async Task<bool> Handle(AddUserCommand message, CancellationToken cancellationToken)
@@ -33,8 +40,8 @@ namespace IMDb.Domain.Commands.User
                 return false;
             }
 
-            //TODO: implementar criptografia para a senha
-            var user = UserFactory.Create(message.Name, message.RoleId, message.Password);
+            var hashPassword = _security.Encrypt(message.Password, message.Name);
+            var user = UserFactory.Create(message.Name, message.RoleId, hashPassword);
 
             if (!user.IsValid()) NotifyValidationErrors(user.ValidationResult);
 

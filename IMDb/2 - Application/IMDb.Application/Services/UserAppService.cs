@@ -1,15 +1,17 @@
 ﻿using AutoMapper;
 using IMDb.Application.Interfaces;
 using IMDb.Application.ViewModels.User;
-using IMDb.Data.CrossCutting.Authorization;
 using IMDb.Domain.Commands.User;
 using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using IMDb.Domain.Utility;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace IMDb.Application.Services
 {
@@ -18,7 +20,6 @@ namespace IMDb.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IMediatorHandler _bus;
-        private readonly AuthenticatedUser _user;
 
         public UserAppService(IUserRepository userRepository, IMapper mapper, IMediatorHandler bus)
         {
@@ -56,12 +57,21 @@ namespace IMDb.Application.Services
         }
 
         public User GetUsersByNameAndPassword(string name, string password)
-        {
-            //TODO: buscar senha criptografada
+        {            
             var user = _userRepository.GetByFilters(user => user.Name.ToLower().Equals(name.ToLower()) &&
-                                                            user.Password.ToLower().Equals(password.ToLower()));
-
+                                                            user.Password.ToLower()
+                                                            .Equals(Encrypt(password, name)));
             return user?.FirstOrDefault();
+        }
+
+        public string Encrypt(string value, string salt)
+        {
+            byte[] byteRepresentation = UnicodeEncoding.UTF8.GetBytes(value + salt);
+
+            byte[] hashedTextInBytes = null;
+            SHA1CryptoServiceProvider mySHA1 = new SHA1CryptoServiceProvider();
+            hashedTextInBytes = mySHA1.ComputeHash(byteRepresentation);
+            return Convert.ToBase64String(hashedTextInBytes);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 
-namespace IMDb.Data.CrossCutting.Authorization
+namespace IMDb.Data.CrossCutting
 {
     public class AuthenticatedUser
     {

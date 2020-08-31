@@ -1,5 +1,5 @@
 ﻿using IMDb.Data.Context;
-using IMDb.Data.CrossCutting.Authorization;
+using IMDb.Data.CrossCutting;
 using IMDb.Domain.Core.Data;
 using IMDb.Domain.DomainObjects;
 using Microsoft.EntityFrameworkCore;

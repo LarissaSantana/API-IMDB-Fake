@@ -1,6 +1,6 @@
 ﻿using IMDb.Data.Context;
 using IMDb.Data.Core;
-using IMDb.Data.CrossCutting.Authorization;
+using IMDb.Data.CrossCutting;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using IMDb.Domain.Utility;

@@ -2,13 +2,14 @@
 using IMDb.Application.Services;
 using IMDb.Application.Services.Interfaces;
 using IMDb.Data.Core;
-using IMDb.Data.CrossCutting.Authorization;
+using IMDb.Data.CrossCutting;
 using IMDb.Data.Repositories;
 using IMDb.Domain.Commands.Movie;
 using IMDb.Domain.Commands.User;
 using IMDb.Domain.Core.Bus;
 using IMDb.Domain.Core.Data;
 using IMDb.Domain.Core.Notifications;
+using IMDb.Domain.Core.Security;
 using IMDb.Domain.Events;
 using IMDb.Domain.Repositories;
 using MediatR;
@@ -44,6 +45,7 @@ namespace IMDb.API
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<AuthenticatedUser>();
+            services.AddSingleton<ISecurity, Security>();
         }
     }
 }

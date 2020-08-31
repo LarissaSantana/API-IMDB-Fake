@@ -1,6 +1,6 @@
 ﻿using IMDb.Data.Context;
 using IMDb.Data.Core;
-using IMDb.Data.CrossCutting.Authorization;
+using IMDb.Data.CrossCutting;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using IMDb.Domain.Utility;
@@ -53,6 +53,15 @@ namespace IMDb.Data.Repositories
                     pageSize: pageSize,
                     currentPage: pageNumber
                 );
+        }
+
+        public bool ValidatePassword(string name, string plainTextPassword)
+        {
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(plainTextPassword))
+                return false;
+
+            return _context.Users.Any(it => it.Name.ToLower().Equals(name.ToLower()) &&
+                                            it.Password.Equals(plainTextPassword));
         }
     }
 }
