@@ -110,7 +110,6 @@ namespace IMDb.Domain.Tests
             Assert.False(result.Result);
         }
 
-        //TODO: TESTE ADD MOVIE - NA LISTA DE CAST DEVE HAVER PELO MENOS UM DIRETOR
         [Fact(DisplayName = "Should fail when adds movie given that a director is required")]
         [Trait("Movie", "MovieCommandHandler Tests")]
         public void AddMovieCommand_WhenDirectorDoesNotExist_ShouldReturnErrorMessage()
@@ -148,7 +147,89 @@ namespace IMDb.Domain.Tests
             Assert.False(result.Result);
         }
 
-        //TODO: TESTE ADD MOVIE - INLINE_DATA PARA VALIDAR QUE TEM PELO MENOS UM ATOR QUANDO O GENERO NÃO É ANIMATION
+        [Theory(DisplayName = "Should fail when adds movie given that at least one actor is required when movie is not animation")]
+        [Trait("Movie", "MovieCommandHandler Tests")]
+        [InlineData(Genre.Action)]
+        [InlineData(Genre.Drama)]
+        [InlineData(Genre.Fantasy)]
+        [InlineData(Genre.SciFi)]
+        public void AddMovieCommand_WhenGenreIsNotAnimationShouldContainAtLeastOneActor_ShouldReturnErrorMessage(Genre genre)
+        {
+            //Arrange
+            var director = EntitiesFake.GenerateCastFake(id: Guid.NewGuid());
+            var casts = new List<Cast>() { director };
+            _fixture.GetCastSetup(casts);
+
+            var castIds = new List<Guid>() { director.Id };
+            var addMovieCommand = CommandsFake.GenerateAddMovieCommandFake(
+                title: "Arrival",
+                genre: Genre.SciFi,
+                castIds: castIds);
+
+            _fixture.HasNotificationsSetup(true);
+
+            //Act
+            var result = _commandHandler.Handle(addMovieCommand, CancellationToken.None);
+
+            //Assert  
+
+            var errorMessage = $"The movie must have at least one actor!";
+            _fixture.Mocker.GetMock<IDomainNotificationHandler<DomainNotification>>().Verify(x => x.Handle(
+                    It.Is<DomainNotification>(x => x.Value.Equals(errorMessage)),
+                    It.IsAny<CancellationToken>()), Times.Once);
+
+            _fixture.Mocker.GetMock<IMovieRepository>()
+                .Verify(x => x.GetCast(It.IsAny<Expression<Func<Cast, bool>>>()), Times.Once);
+
+            _fixture.Mocker.GetMock<IMovieRepository>().Verify(x => x.Add(It.IsAny<Movie>()), Times.Never);
+
+            _fixture.Mocker.GetMock<IUnitOfWork>().Verify(x => x.Commit(), Times.Never);
+
+            Assert.False(result.Result);
+        }
+
+        [Fact(DisplayName = "Should succeed when adds movie given that animation genre might not contain any actor in its cast")]
+        [Trait("Movie", "MovieCommandHandler Tests")]
+        public void AddMovieCommand_WhenGenreIsAnimationMightNotContainAnActor_ShouldSucceed()
+        {
+            //Arrange
+            var director = EntitiesFake.GenerateCastFake(id: Guid.NewGuid());
+            var casts = new List<Cast>() { director };
+            _fixture.GetCastSetup(casts);
+
+            var castIds = new List<Guid>() { director.Id };
+            var addMovieCommand = CommandsFake.GenerateAddMovieCommandFake(
+                title: "Arrival",
+                genre: Genre.Animation,
+                castIds: castIds);
+
+            _fixture.HasNotificationsSetup(false);
+            _fixture.CommitSetup();
+
+            //Act
+            var result = _commandHandler.Handle(addMovieCommand, CancellationToken.None);
+
+            //Assert  
+            var errorMessage = $"The movie must have at least one actor!";
+            _fixture.Mocker.GetMock<IDomainNotificationHandler<DomainNotification>>().Verify(x => x.Handle(
+                    It.Is<DomainNotification>(x => x.Value.Equals(errorMessage)),
+                    It.IsAny<CancellationToken>()), Times.Never);
+
+            _fixture.Mocker.GetMock<IMovieRepository>()
+                .Verify(x => x.GetCast(It.IsAny<Expression<Func<Cast, bool>>>()), Times.Once);
+
+            _fixture.Mocker.GetMock<IMovieRepository>()
+                .Verify(x => x.Add(It.Is<Movie>(movie =>
+                movie.Title == addMovieCommand.Title &&
+                movie.Genre == addMovieCommand.Genre &&
+                addMovieCommand.CastIds.All(x => movie.CastOfMovies.Select(x => x.CastId).Contains(x)))),
+                Times.Once);
+
+            _fixture.Mocker.GetMock<IUnitOfWork>().Verify(x => x.Commit(), Times.Once);
+
+            Assert.True(result.Result);
+        }
+
         //TODO: TESTE ADD MOVIE - CASO RETORNE ERRO DE VALIDAÇÃO DO DOMÍNIO PARA CASTOFMOVIE
         //TODO: TESTE ADD MOVIE - CASO RETORNE ERRO DE VALIDAÇÃO DO DOMÍNIO PARA MOVIE
 
