@@ -37,8 +37,7 @@ namespace IMDb.Domain.Commands.Movie
 
         public async Task<bool> Handle(AddMovieCommand message, CancellationToken cancellationToken)
         {
-            ValidateCastOfMovie(message);
-            if (HasNotifications()) return false;
+            if (!CastOfMovieIsValid(message)) return false;
 
             var movie = MovieFactory.Create(message.Genre, message.Title);
             var castOfMovieList = new List<CastOfMovie>();
@@ -61,12 +60,15 @@ namespace IMDb.Domain.Commands.Movie
             return await Task.FromResult(Commit());
         }
 
-        private void ValidateCastOfMovie(AddMovieCommand message)
+        private bool CastOfMovieIsValid(AddMovieCommand message)
         {
             var casts = _movieRepository.GetCast(it => message.CastIds.Contains(it.Id)).ToList();
             var castsNotFound = message.CastIds.Except(casts.Select(x => x.Id));
             if (castsNotFound.Any())
+            {
                 castsNotFound.ToList().ForEach(x => NotifyValidationErrors($"Cast not found. Id: {x}"));
+                return false;
+            }
 
             if (casts.Any())
             {
@@ -76,6 +78,8 @@ namespace IMDb.Domain.Commands.Movie
                 if (message.Genre != Genre.Animation && !casts.Any(x => x.CastType == CastType.Actor))
                     NotifyValidationErrors("The movie must have at least one actor!");
             }
+
+            return !HasNotifications();
         }
 
         public async Task<bool> Handle(AddCastCommand message, CancellationToken cancellationToken)
@@ -99,7 +103,7 @@ namespace IMDb.Domain.Commands.Movie
             }
 
             var ratingOfMovieRepo = _movieRepository.GetRatingOfMoviesByFilters(mr =>
-                    mr.UserId == userAuthenticatedId.Value && 
+                    mr.UserId == userAuthenticatedId.Value &&
                     mr.MovieId == message.MovieId).FirstOrDefault();
 
             RatingOfMovieAddedEvent ratingOfMovieAddedEvent = null;

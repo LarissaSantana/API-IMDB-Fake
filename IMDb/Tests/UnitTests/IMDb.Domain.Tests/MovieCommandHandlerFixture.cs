@@ -1,5 +1,6 @@
 ﻿using IMDb.Domain.Commands.Movie;
 using IMDb.Domain.Core.Data;
+using IMDb.Domain.Core.Notifications;
 using IMDb.Domain.Entities;
 using IMDb.Domain.Repositories;
 using Moq;
@@ -36,6 +37,13 @@ namespace IMDb.Domain.Tests
             Mocker.GetMock<IUnitOfWork>()
                 .Setup(x => x.Commit())
                 .Returns(success);
+        }
+
+        public void HasNotificationsSetup(bool hasNotification)
+        {
+            Mocker.GetMock<IDomainNotificationHandler<DomainNotification>>()
+                .Setup(s => s.HasNotifications())
+                .Returns(hasNotification);
         }
     }
 }
